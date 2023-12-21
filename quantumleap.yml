@@ -1,0 +1,82 @@
+
+version: "3.8"
+services:
+
+
+  # Quantum Leap is persisting Short Term History to Crate-DB
+  ramp-iot-quantumleap:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: orchestracities/quantumleap:${QUANTUMLEAP_VERSION}
+    hostname: ramp-iot-quantumleap
+    container_name: ramp-iot-quantumleap
+    depends_on:
+      - ramp_iot-crate-db
+      - ramp_iot-redis-db
+    networks:
+      - ramp_iot
+    ports:
+      - "127.0.0.1:${QUANTUMLEAP_PORT}:${QUANTUMLEAP_PORT}"
+    environment:
+      - CRATE_HOST=ramp_iot-crate-db
+      - REDIS_HOST=ramp_iot-redis-db
+      - REDIS_PORT=${REDIS_PORT}
+      - LOGLEVEL=DEBUG # DEBUG, INFO, WARNING , ERROR
+    logging:
+      options:
+        max-size: 50m    
+    restart: always
+    healthcheck:
+      test: curl --fail -s http://ramp_iot-quantumleap:${QUANTUMLEAP_PORT}/version || exit 1
+
+  ramp_iot-crate-db:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: crate:${CRATE_VERSION}
+    hostname: ramp_iot-crate-db
+    container_name: ramp_iot-crate
+    ports:
+      # Admin UI
+      - "127.0.0.1:4200:4200"
+      # Transport protocol
+      - "127.0.0.1:4300:4300"
+    networks:
+      - ramp_iot
+    command: crate  -Cpath.repo=/data -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" - CRATE_HEAP_SIZE=3g # see https://crate.io/docs/crate/howtos/en/latest/deployment/containers/docker.html#troubleshooting
+    # in host pc /etc/sysctl.conf and configure: vm.max_map_count = 262144
+    volumes:
+      - ramp-crate-db:/data
+    logging:
+      options:
+        max-size: 50m
+    restart: always
+    healthcheck:
+       test: curl --max-time 25 ramp_iot-crate-db:4200 || exit 1
+       interval: 30s
+       timeout: 30s
+
+  ramp_iot-redis-db:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: redis:${REDIS_VERSION}
+    hostname: ramp_iot-redis-db
+    container_name: ramp_iot-redis
+    networks:
+      - ramp_iot
+    ports:
+      - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}" # localhost:6379
+    volumes:
+      - ramp_iot-redis-db:/data
+    logging:
+      options:
+        max-size: 50m
+    restart: always
+    healthcheck:
+      test: |
+        host=`hostname -i || echo '127.0.0.1'`;
+        ping=`redis-cli -h "$host" ping` && [ "$ping" = 'PONG' ] && echo 0 || echo 1
+      interval: 10s
+
+volumes:
+  ramp-crate-db: 
+  ramp_iot-redis-db:

@@ -1,0 +1,47 @@
+{
+    "services": [
+        {
+            "apikey": "2uv4s40d59ovesffsdf",
+            "entity_type": "ENERGY_METER",
+            "cbroker": "http://orion:1026",
+            "resource": "/iot/json",
+            "timezone": "Europe/Athens",
+            "attributes": [
+                {
+                    "object_id": "v",
+                    "name": "phaseVoltage",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "2G"
+                        }
+                    }
+                },
+                {
+                    "object_id": "a",
+                    "name": "current",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "AMP"
+                        }
+                    }
+                },
+                {
+                    "object_id": "e",
+                    "name": "totalApparentEnergyExport",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "KWH"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+

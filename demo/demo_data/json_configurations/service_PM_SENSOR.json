@@ -1,0 +1,47 @@
+{
+    "services": [
+        {
+            "apikey": "353345642",
+            "entity_type": "PM_SENSOR",
+            "cbroker": "http://orion:1026",
+            "resource": "/iot/json",
+            "timezone": "Europe/Athens",
+            "attributes": [
+                {
+                    "object_id": "pm_25",
+                    "name": "pm25",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "GQ"
+                        }
+                    }
+                },
+                {
+                    "object_id": "t",
+                    "name": "temperature",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "CEL"
+                        }
+                    }
+                },
+                {
+                    "object_id": "rh",
+                    "name": "relativeHumidity",
+                    "type": "Float",
+                    "metadata": {
+                        "unitCode": {
+                            "type": "Property",
+                            "value": "P1"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
+

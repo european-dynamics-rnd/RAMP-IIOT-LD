@@ -1,0 +1,82 @@
+version: "3.8"
+
+include:
+- keycloak.yml
+- temporal.yml
+
+services:
+  # @context file is served from here
+  ld-context:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: httpd:alpine
+    hostname: ramp_iot-ld-context
+    container_name: ramp_iot-ld-context
+    expose:
+        - "3004:80"
+    networks:
+      - ramp_iot
+    volumes:
+        - ${PWD}/data-models:/usr/local/apache2/htdocs/
+    # healthcheck:
+    #   test: (wget --server-response --spider --quiet  http://ld-context/datamodels.context-ngsi.jsonld 2>&1 | awk 'NR==1{print $$2}'|  grep -q -e "200") || exit 1
+ 
+  ramp_iot-orion:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    platform: linux/amd64
+    image: quay.io/fiware/orion-ld:${ORION_LD_VERSION}
+    hostname: ramp_iot-orion
+    container_name: ramp_iot-orion
+    restart: always
+    depends_on:
+      - ramp_iot-mongo-db
+      - ramp_iot-timescale-db
+    networks:
+      - ramp_iot
+    # expose:
+    #   - "${ORION_LD_PORT}:${ORION_LD_PORT}"
+    ports:   # for communication outside docker environment BUT only localhost
+      - "127.0.0.1:${ORION_LD_PORT}:${ORION_LD_PORT}"
+    environment:
+      - ORIONLD_TROE=TRUE
+      - ORIONLD_TROE_USER=${ORIONLD_TROE_USER}
+      - ORIONLD_TROE_PWD=${ORIONLD_TROE_PWD}
+      - ORIONLD_TROE_HOST=ramp_iot-timescale-db
+      - ORIONLD_MONGO_HOST=ramp_iot-mongo-db
+      - ORIONLD_MULTI_SERVICE=TRUE
+      - ORIONLD_DISABLE_FILE_LOG=TRUE
+    command: -logLevel DEBUG  -troePoolSize 10 -forwarding 
+    healthcheck:
+      test: curl --fail -s http://ramp_iot-orion:${ORION_LD_PORT}/version || exit 1
+      interval: 10s
+
+  # Databases
+  ramp_iot-mongo-db:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: mongo:${MONGO_DB_VERSION}
+    hostname: ramp_iot-mongo-db
+    container_name: ramp_iot-mongo-db
+    expose:
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
+    networks:
+      - ramp_iot
+    volumes:
+      - ramp-iot-mongo-db-data:/data/db
+      - ramp-iot-mongo-config:/data/configdb
+    healthcheck:
+      test: |
+        host=`hostname --ip-address || echo '127.0.0.1'`; 
+        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
+      interval: 5s
+
+networks:
+  ramp_iot:
+    labels:
+      org.eurodyn: 'ramp_iot'
+
+
+volumes:
+  ramp-iot-mongo-db-data: 
+  ramp-iot-mongo-config: 

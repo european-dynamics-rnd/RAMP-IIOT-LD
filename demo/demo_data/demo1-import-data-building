@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+
+#
+#
+
+set -e
+export $(cat ../../.env | grep "#" -v)
+
+curl -s -X POST 'http://localhost:'"${ORION_LD_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
+	-H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H 'NGSILD-Tenant: openiot' \
+	-H 'Link: <'"${CONTEXT}"'>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+	-H 'Accept: application/ld+json' \
+	--data '[
+  {
+    "id": "urn:ngsi-ld:Building:demo1",
+    "type": "Building",
+    "category": {"type": "Property", "value": ["public"]},
+    "address": {
+        "type": "Property",
+        "value": { "streetAddress": "Zisimopoulou 12", "addressRegion": "Athens", "addressLocality": "Athens", "postalCode": "11524", "type": "PostalAddress"},
+        "verified": { "type": "Property", "value": true}
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": { "type": "Point", "coordinates": [37.99941892828441, 23.76643871430642]}
+    },
+    "name": {"type": "Property","value": "Philhellenism Museum"},
+    "owner": {"type": "Relationship", "object": "urn:ngsi-ld:Person:person001"}
+  },
+  {
+    "id": "urn:ngsi-ld:Person:person001",
+    "type": "Person",
+    "name": {"type": "Property","value": "Philhellenism Museum Owner"},
+    "owns": {"type": "Relationship", "object": "urn:ngsi-ld:Building:demo1"}
+  }
+  ]'   |jq
+  

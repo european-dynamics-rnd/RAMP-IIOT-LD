@@ -1,0 +1,20 @@
+{
+    "devices": [
+        {
+            "device_id": "energymeter-001",
+            "entity_name": "urn:ngsi-ld:ENERGY_METER:energymeter-001",
+            "entity_type": "ENERGY_METER",
+            "cbroker": "http://orion:1026",
+            "protocol":    "/iot/json",
+            "transport":   "MQTT",
+            "timezone": "Europe/Athens",
+            "static_attributes": [
+                    {
+                        "name": "controlledAsset",
+                        "type": "Relationship",
+                        "value": "urn:ngsi-ld:Building:demo1"
+                      }
+            ]
+        }
+    ]
+}

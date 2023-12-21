@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+
+  ramp_iot-mintaka:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: quay.io/fiware/mintaka:${MINTAKA_VERSION}
+    hostname:  ramp_iot-mintaka
+    container_name:  ramp_iot-mintaka
+    restart: always
+    depends_on:
+      - ramp_iot-orion
+      - ramp_iot-timescale-db
+    environment:
+      - MICRONAUT_SERVER_PORT=${MINTAKA_PORT}
+      - DATASOURCES_DEFAULT_HOST=ramp_iot-timescale-db
+      - DATASOURCES_DEFAULT_USERNAME=${ORIONLD_TROE_USER}
+      - DATASOURCES_DEFAULT_PASSWORD=${ORIONLD_TROE_PWD}
+      - DATASOURCES_DEFAULT_DATABASE=orion
+      - DATASOURCES_DEFAULT_MAXIMUM_POOL_SIZE=2
+      - DATASOURCES_DEFAULT_PORT=${TIMESCALE_PORT}
+      - ENDPOINTS_INFO_ENABLED=true
+      - ENDPOINTS_INFO_SENSITIVE=false
+      - LOGGERS_LEVELS_ROOT=DEBUG
+      # - CONTEXT_DEFAULT_URL=${CORE_CONTEXT} # if the VM does not have internet access Mintaka fails. Mintaka needs to download every time the context
+    ports:
+      - "127.0.0.1:${MINTAKA_PORT}:${MINTAKA_PORT}"
+    networks:
+      - ramp_iot
+
+  ramp_iot-timescale-db:
+    labels:
+      org.eurodyn: 'ramp_iot'
+    image: timescale/timescaledb-postgis:${TIMESCALE_VERSION}
+    hostname:  ramp_iot-timescale-db
+    container_name: ramp_iot-timescale-db
+    environment:
+      - POSTGRES_USER=${ORIONLD_TROE_USER}
+      - POSTGRES_PASSWORD=${ORIONLD_TROE_PWD}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    command: ["postgres", "-c", "log_statement=none"]
+    expose:
+      - "${TIMESCALE_PORT}:${TIMESCALE_PORT}"
+    networks:
+      - ramp_iot
+    volumes:
+      - timescale-db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${ORIONLD_TROE_USER}" ]
+      interval: 15s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+
+# networks:
+#   ramp_iot:
+#     external: true
+#     name: ramp_iot
+
+volumes:
+  timescale-db: 
