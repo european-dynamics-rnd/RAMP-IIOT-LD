@@ -3,7 +3,7 @@
 
     services:
       # keycloak Orion
-      - host: "ramp_iot-orion"
+      - host: "ramp_iiot-orion"
         name: "orion-keycloak"
         port: 1026
         protocol: http
@@ -31,7 +31,7 @@
                   - Authorization
                   - authorization
               # keycloak Orion
-      - host: "ramp_iot-mintaka"
+      - host: "ramp_iiot-mintaka"
         name: "mintaka-keycloak"
         port: 8086
         protocol: http

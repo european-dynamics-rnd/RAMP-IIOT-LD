@@ -43,5 +43,5 @@ echo -e 'Send measurements of device' "${SENSOR}"': Voltage: '"${v}"', Current: 
 echo -e '/'"${TOPIC}"'/'"${SENSOR}"'/attrs'
 
 # mosquitto_pub -h ${HOST} -p ${IOTA_MQTT_PORT} -m 'v|'"${v}"'|a|'"${a}"'|e|'"${e}"'' -t '/'"${TOPIC}"'/'"${SENSOR}"'/attrs'
-mosquitto_pub -h ${HOST} -p ${IOTA_MQTT_PORT} -u ramp-iot -P 'PmnMBT@c2Hf62Y4%sAJf' -m '{"v":'"${v}"',"a":'"${a}"',"e":'"${e}"'} ' -t '/'"${TOPIC}"'/'"${SENSOR}"'/attrs'
+mosquitto_pub -h ${HOST} -p ${IOTA_MQTT_PORT} -u ramp-iiot -P 'PmnMBT@c2Hf62Y4%sAJf' -m '{"v":'"${v}"',"a":'"${a}"',"e":'"${e}"'} ' -t '/'"${TOPIC}"'/'"${SENSOR}"'/attrs'
 

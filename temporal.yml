@@ -1,19 +1,19 @@
 version: "3.8"
 services:
 
-  ramp_iot-mintaka:
+  ramp_iiot-mintaka:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: quay.io/fiware/mintaka:${MINTAKA_VERSION}
-    hostname:  ramp_iot-mintaka
-    container_name:  ramp_iot-mintaka
+    hostname:  ramp_iiot-mintaka
+    container_name:  ramp_iiot-mintaka
     restart: always
     depends_on:
-      - ramp_iot-orion
-      - ramp_iot-timescale-db
+      - ramp_iiot-orion
+      - ramp_iiot-timescale-db
     environment:
       - MICRONAUT_SERVER_PORT=${MINTAKA_PORT}
-      - DATASOURCES_DEFAULT_HOST=ramp_iot-timescale-db
+      - DATASOURCES_DEFAULT_HOST=ramp_iiot-timescale-db
       - DATASOURCES_DEFAULT_USERNAME=${ORIONLD_TROE_USER}
       - DATASOURCES_DEFAULT_PASSWORD=${ORIONLD_TROE_PWD}
       - DATASOURCES_DEFAULT_DATABASE=orion
@@ -26,14 +26,14 @@ services:
     ports:
       - "127.0.0.1:${MINTAKA_PORT}:${MINTAKA_PORT}"
     networks:
-      - ramp_iot
+      - ramp_iiot
 
-  ramp_iot-timescale-db:
+  ramp_iiot-timescale-db:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: timescale/timescaledb-postgis:${TIMESCALE_VERSION}
-    hostname:  ramp_iot-timescale-db
-    container_name: ramp_iot-timescale-db
+    hostname:  ramp_iiot-timescale-db
+    container_name: ramp_iiot-timescale-db
     environment:
       - POSTGRES_USER=${ORIONLD_TROE_USER}
       - POSTGRES_PASSWORD=${ORIONLD_TROE_PWD}
@@ -42,7 +42,7 @@ services:
     expose:
       - "${TIMESCALE_PORT}:${TIMESCALE_PORT}"
     networks:
-      - ramp_iot
+      - ramp_iiot
     volumes:
       - timescale-db:/var/lib/postgresql/data
     healthcheck:
@@ -53,9 +53,9 @@ services:
       start_period: 60s
 
 # networks:
-#   ramp_iot:
+#   ramp_iiot:
 #     external: true
-#     name: ramp_iot
+#     name: ramp_iiot
 
 volumes:
   timescale-db: 
