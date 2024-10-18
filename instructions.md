@@ -1,9 +1,9 @@
 # Partners
-Open source RAMP IoT LD platform is a complete connectivity solution, that allows you to control devices, gather and visualize data and link customized applications.
+Open source RAMP IIoT LD platform is a complete connectivity solution, that allows you to control devices, gather and visualize data and link customized applications.
 
 ## But how does it work?
 
-**Step 1**: Your factory’s machines, workers, robots, sensors etc. send their data to the RAMP IoT LD platform, following the [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf) protocol. You can see the available [FIWARE generic enablers](https://github.com/FIWARE/catalogue)
+**Step 1**: Your factory’s machines, workers, robots, sensors etc. send their data to the RAMP IIoT LD platform, following the [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf) protocol. You can see the available [FIWARE generic enablers](https://github.com/FIWARE/catalogue)
 
 **Step 2**: The platform receives the data and then can either:
 
@@ -11,7 +11,7 @@ Open source RAMP IoT LD platform is a complete connectivity solution, that allow
 - Send the data to RAMP dashboard for visualization
 - Store the machines’ data for future use
 
-RAMP IoT LD platform is fully compatible with multiple machine protocols, using FIWARE compatible adapters.
+RAMP IIoT LD platform is fully compatible with multiple machine protocols, using FIWARE compatible adapters.
 
 **Step 3**:  Based on the action that is performed in the previous step:
 
@@ -21,9 +21,9 @@ RAMP IoT LD platform is fully compatible with multiple machine protocols, using 
     - identify possible faults or delays and make any necessary adjustments
     - compare with current data
 
-RAMP IoT LD Platform is a FIWARE-based package to be installed on factory premises and is connected with RAMP.
+RAMP IIoT LD Platform is a FIWARE-based package to be installed on factory premises and is connected with RAMP.
 
-[Download RAMP IoT LD platform](https://github.com/european-dynamics-rnd/RAMP-IOT-LD). In the repository you can find more detailed instruction and varius of examples.
+[Download RAMP IIoT LD platform](https://github.com/european-dynamics-rnd/RAMP-IIOT-LD). In the repository you can find more detailed instruction and varius of examples.
 
 It provides a set of FIWARE Generic Enablers ready to be used as IoT platform.
 

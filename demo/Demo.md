@@ -9,7 +9,7 @@ The main components are:
 5. [TimescaleDB](https://www.timescale.com/) to store all entities received by Orion-LD.
 6. [FIWARE IoT JSON Agent](https://github.com/telefonicaid/iotagent-json) to provide measurements .
 
-![RAMP IoT LD demo Architecture](img/demo_diagram.png)
+![RAMP IIoT LD demo Architecture](img/demo_diagram.png)
 
 The demo have can run on every Linux system. The following tools needs to be installed: ```docker-compose, curl, bash, jq``` 
 jq is used for the formatting of the return json from Orion-LD and Mintaka.
@@ -22,7 +22,7 @@ The main docker-compose file(docker-compose.yml) include additional compose file
 2. keycloak.yml. Service for Keycloak and Kong.
 3. iot-agent-json.yml. Service for IoT Agent.
 
-**IMPORTANT** The database of Keycloak (volume ramp-keycloak-db) have been initialised with default values for the purposes of the demo. To disable it comment line " - ${PWD}/keycloak/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql" on the [keycloak.yml](../keycloak.yml), remove the image (```docker volume rm ramp_iot_ramp-keycloak-db```), restart docker-compose and follow the instruction [here](#keyclock) for setup.
+**IMPORTANT** The database of Keycloak (volume ramp-keycloak-db) have been initialised with default values for the purposes of the demo. To disable it comment line " - ${PWD}/keycloak/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql" on the [keycloak.yml](../keycloak.yml), remove the image (```docker volume rm ramp_iiot_ramp-keycloak-db```), restart docker-compose and follow the instruction [here](#keyclock) for setup.
 
 ## Demo with IoT Agent - JSON
 A demo script has been developed. See [demo_data](./demo_data/) for more details.

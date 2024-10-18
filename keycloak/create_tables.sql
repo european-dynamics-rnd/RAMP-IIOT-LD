@@ -1663,12 +1663,12 @@ d6f1e24d-5a73-4f6f-a4ac-a0d411d908a7	t	f	security-admin-console	0	t	\N	/admin/ma
 b1c34505-93d7-4e13-8128-e0c4280aa73f	t	f	fiware-server-realm	0	f	\N	\N	t	\N	f	793c40ee-e7c8-4e66-9f1c-f16bc168faba	\N	0	f	f	fiware-server Realm	f	client-secret	\N	\N	\N	t	f	f	f
 631eb608-f712-491c-bce5-b9873d7d72a5	t	f	account	0	t	\N	/realms/fiware-server/account/	f	\N	f	fiware-server	openid-connect	0	f	f	${client_account}	f	client-secret	${authBaseUrl}	\N	\N	t	f	f	f
 24225287-61ca-4a67-bb1f-1dfc9482d265	t	f	account-console	0	t	\N	/realms/fiware-server/account/	f	\N	f	fiware-server	openid-connect	0	f	f	${client_account-console}	f	client-secret	${authBaseUrl}	\N	\N	t	f	f	f
-7c468e16-23ac-4998-97cc-84950d801ad0	t	t	mintaka-pep	0	f	zQXGjcxPWuF7YBpAiFtaIOEIOrCiWqeH	http://ramp_iot-mintaka	f	http://ramp_iot-mintaka	f	fiware-server	openid-connect	-1	f	f		t	client-secret			\N	t	f	t	f
+7c468e16-23ac-4998-97cc-84950d801ad0	t	t	mintaka-pep	0	f	zQXGjcxPWuF7YBpAiFtaIOEIOrCiWqeH	http://ramp_iiot-mintaka	f	http://ramp_iiot-mintaka	f	fiware-server	openid-connect	-1	f	f		t	client-secret			\N	t	f	t	f
 1d7678b6-8c20-4ff6-b065-f38662242012	t	f	admin-cli	0	t	\N	\N	f	\N	f	fiware-server	openid-connect	0	f	f	${client_admin-cli}	f	client-secret	\N	\N	\N	f	f	t	f
 26c5c4cd-41f8-404a-8389-1c1c98c13b4b	t	f	broker	0	f	\N	\N	t	\N	f	fiware-server	openid-connect	0	f	f	${client_broker}	f	client-secret	\N	\N	\N	t	f	f	f
 936c2448-f2d8-41f0-8f92-f95a81341302	t	f	realm-management	0	f	\N	\N	t	\N	f	fiware-server	openid-connect	0	f	f	${client_realm-management}	f	client-secret	\N	\N	\N	t	f	f	f
 c85b4883-afd1-459d-9d8f-88e735e3f184	t	f	security-admin-console	0	t	\N	/admin/fiware-server/console/	f	\N	f	fiware-server	openid-connect	0	f	f	${client_security-admin-console}	f	client-secret	${authAdminUrl}	\N	\N	t	f	f	f
-d2a02ef8-49fc-4901-98c1-8a17ec0fc192	t	t	orion-pep	0	f	yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk	http://ramp_iot-orion	f	http://ramp_iot-orion	f	fiware-server	openid-connect	-1	f	f		t	client-secret			\N	t	f	t	f
+d2a02ef8-49fc-4901-98c1-8a17ec0fc192	t	t	orion-pep	0	f	yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk	http://ramp_iiot-orion	f	http://ramp_iiot-orion	f	fiware-server	openid-connect	-1	f	f		t	client-secret			\N	t	f	t	f
 \.
 
 
@@ -3228,8 +3228,8 @@ d6f1e24d-5a73-4f6f-a4ac-a0d411d908a7	/admin/master/console/*
 631eb608-f712-491c-bce5-b9873d7d72a5	/realms/fiware-server/account/*
 24225287-61ca-4a67-bb1f-1dfc9482d265	/realms/fiware-server/account/*
 c85b4883-afd1-459d-9d8f-88e735e3f184	/admin/fiware-server/console/*
-d2a02ef8-49fc-4901-98c1-8a17ec0fc192	http://ramp_iot-orion
-7c468e16-23ac-4998-97cc-84950d801ad0	http://ramp_iot-mintaka
+d2a02ef8-49fc-4901-98c1-8a17ec0fc192	http://ramp_iiot-orion
+7c468e16-23ac-4998-97cc-84950d801ad0	http://ramp_iiot-mintaka
 \.
 
 
@@ -3532,8 +3532,8 @@ COPY public.username_login_failure (realm_id, username, failed_login_not_before,
 COPY public.web_origins (client_id, value) FROM stdin;
 d6f1e24d-5a73-4f6f-a4ac-a0d411d908a7	+
 c85b4883-afd1-459d-9d8f-88e735e3f184	+
-d2a02ef8-49fc-4901-98c1-8a17ec0fc192	http://ramp_iot-orion
-7c468e16-23ac-4998-97cc-84950d801ad0	http://ramp_iot-mintaka
+d2a02ef8-49fc-4901-98c1-8a17ec0fc192	http://ramp_iiot-orion
+7c468e16-23ac-4998-97cc-84950d801ad0	http://ramp_iiot-mintaka
 \.
 
 

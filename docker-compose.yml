@@ -8,32 +8,32 @@ services:
   # @context file is served from here
   ld-context:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: httpd:alpine
-    hostname: ramp_iot-ld-context
-    container_name: ramp_iot-ld-context
+    hostname: ramp_iiot-ld-context
+    container_name: ramp_iiot-ld-context
     expose:
         - "3004:80"
     networks:
-      - ramp_iot
+      - ramp_iiot
     volumes:
         - ${PWD}/data-models:/usr/local/apache2/htdocs/
     # healthcheck:
     #   test: (wget --server-response --spider --quiet  http://ld-context/datamodels.context-ngsi.jsonld 2>&1 | awk 'NR==1{print $$2}'|  grep -q -e "200") || exit 1
  
-  ramp_iot-orion:
+  ramp_iiot-orion:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     platform: linux/amd64
     image: quay.io/fiware/orion-ld:${ORION_LD_VERSION}
-    hostname: ramp_iot-orion
-    container_name: ramp_iot-orion
+    hostname: ramp_iiot-orion
+    container_name: ramp_iiot-orion
     restart: always
     depends_on:
-      - ramp_iot-mongo-db
-      - ramp_iot-timescale-db
+      - ramp_iiot-mongo-db
+      - ramp_iiot-timescale-db
     networks:
-      - ramp_iot
+      - ramp_iiot
     # expose:
     #   - "${ORION_LD_PORT}:${ORION_LD_PORT}"
     ports:   # for communication outside docker environment BUT only localhost
@@ -42,29 +42,29 @@ services:
       - ORIONLD_TROE=TRUE
       - ORIONLD_TROE_USER=${ORIONLD_TROE_USER}
       - ORIONLD_TROE_PWD=${ORIONLD_TROE_PWD}
-      - ORIONLD_TROE_HOST=ramp_iot-timescale-db
-      - ORIONLD_MONGO_HOST=ramp_iot-mongo-db
+      - ORIONLD_TROE_HOST=ramp_iiot-timescale-db
+      - ORIONLD_MONGO_HOST=ramp_iiot-mongo-db
       - ORIONLD_MULTI_SERVICE=TRUE
       - ORIONLD_DISABLE_FILE_LOG=TRUE
     command: -logLevel DEBUG  -troePoolSize 10 -forwarding 
     healthcheck:
-      test: curl --fail -s http://ramp_iot-orion:${ORION_LD_PORT}/version || exit 1
+      test: curl --fail -s http://ramp_iiot-orion:${ORION_LD_PORT}/version || exit 1
       interval: 10s
 
   # Databases
-  ramp_iot-mongo-db:
+  ramp_iiot-mongo-db:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: mongo:${MONGO_DB_VERSION}
-    hostname: ramp_iot-mongo-db
-    container_name: ramp_iot-mongo-db
+    hostname: ramp_iiot-mongo-db
+    container_name: ramp_iiot-mongo-db
     expose:
       - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
     networks:
-      - ramp_iot
+      - ramp_iiot
     volumes:
-      - ramp-iot-mongo-db-data:/data/db
-      - ramp-iot-mongo-config:/data/configdb
+      - ramp-iiot-mongo-db-data:/data/db
+      - ramp-iiot-mongo-config:/data/configdb
     healthcheck:
       test: |
         host=`hostname --ip-address || echo '127.0.0.1'`; 
@@ -72,11 +72,11 @@ services:
       interval: 5s
 
 networks:
-  ramp_iot:
+  ramp_iiot:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
 
 
 volumes:
-  ramp-iot-mongo-db-data: 
-  ramp-iot-mongo-config: 
+  ramp-iiot-mongo-db-data: 
+  ramp-iiot-mongo-config: 

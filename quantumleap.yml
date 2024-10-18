@@ -4,22 +4,22 @@ services:
 
 
   # Quantum Leap is persisting Short Term History to Crate-DB
-  ramp-iot-quantumleap:
+  ramp-iiot-quantumleap:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: orchestracities/quantumleap:${QUANTUMLEAP_VERSION}
-    hostname: ramp-iot-quantumleap
-    container_name: ramp-iot-quantumleap
+    hostname: ramp-iiot-quantumleap
+    container_name: ramp-iiot-quantumleap
     depends_on:
-      - ramp_iot-crate-db
-      - ramp_iot-redis-db
+      - ramp_iiot-crate-db
+      - ramp_iiot-redis-db
     networks:
-      - ramp_iot
+      - ramp_iiot
     ports:
       - "127.0.0.1:${QUANTUMLEAP_PORT}:${QUANTUMLEAP_PORT}"
     environment:
-      - CRATE_HOST=ramp_iot-crate-db
-      - REDIS_HOST=ramp_iot-redis-db
+      - CRATE_HOST=ramp_iiot-crate-db
+      - REDIS_HOST=ramp_iiot-redis-db
       - REDIS_PORT=${REDIS_PORT}
       - LOGLEVEL=DEBUG # DEBUG, INFO, WARNING , ERROR
     logging:
@@ -27,21 +27,21 @@ services:
         max-size: 50m    
     restart: always
     healthcheck:
-      test: curl --fail -s http://ramp_iot-quantumleap:${QUANTUMLEAP_PORT}/version || exit 1
+      test: curl --fail -s http://ramp_iiot-quantumleap:${QUANTUMLEAP_PORT}/version || exit 1
 
-  ramp_iot-crate-db:
+  ramp_iiot-crate-db:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: crate:${CRATE_VERSION}
-    hostname: ramp_iot-crate-db
-    container_name: ramp_iot-crate
+    hostname: ramp_iiot-crate-db
+    container_name: ramp_iiot-crate
     ports:
       # Admin UI
       - "127.0.0.1:4200:4200"
       # Transport protocol
       - "127.0.0.1:4300:4300"
     networks:
-      - ramp_iot
+      - ramp_iiot
     command: crate  -Cpath.repo=/data -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*" - CRATE_HEAP_SIZE=3g # see https://crate.io/docs/crate/howtos/en/latest/deployment/containers/docker.html#troubleshooting
     # in host pc /etc/sysctl.conf and configure: vm.max_map_count = 262144
     volumes:
@@ -51,22 +51,22 @@ services:
         max-size: 50m
     restart: always
     healthcheck:
-       test: curl --max-time 25 ramp_iot-crate-db:4200 || exit 1
+       test: curl --max-time 25 ramp_iiot-crate-db:4200 || exit 1
        interval: 30s
        timeout: 30s
 
-  ramp_iot-redis-db:
+  ramp_iiot-redis-db:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: redis:${REDIS_VERSION}
-    hostname: ramp_iot-redis-db
-    container_name: ramp_iot-redis
+    hostname: ramp_iiot-redis-db
+    container_name: ramp_iiot-redis
     networks:
-      - ramp_iot
+      - ramp_iiot
     ports:
       - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}" # localhost:6379
     volumes:
-      - ramp_iot-redis-db:/data
+      - ramp_iiot-redis-db:/data
     logging:
       options:
         max-size: 50m
@@ -79,4 +79,4 @@ services:
 
 volumes:
   ramp-crate-db: 
-  ramp_iot-redis-db:
+  ramp_iiot-redis-db:

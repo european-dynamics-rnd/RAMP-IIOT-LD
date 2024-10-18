@@ -789,18 +789,18 @@
       "name": "",
       "description": "",
       "rootUrl": "",
-      "adminUrl": "http://ramp_iot-mintaka",
-      "baseUrl": "http://ramp_iot-mintaka",
+      "adminUrl": "http://ramp_iiot-mintaka",
+      "baseUrl": "http://ramp_iiot-mintaka",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://ramp_iot-mintaka"
+        "http://ramp_iiot-mintaka"
       ],
       "webOrigins": [
-        "http://ramp_iot-mintaka"
+        "http://ramp_iiot-mintaka"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -935,18 +935,18 @@
       "name": "",
       "description": "",
       "rootUrl": "",
-      "adminUrl": "http://ramp_iot-orion",
-      "baseUrl": "http://ramp_iot-orion",
+      "adminUrl": "http://ramp_iiot-orion",
+      "baseUrl": "http://ramp_iiot-orion",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://ramp_iot-orion"
+        "http://ramp_iiot-orion"
       ],
       "webOrigins": [
-        "http://ramp_iot-orion"
+        "http://ramp_iiot-orion"
       ],
       "notBefore": 0,
       "bearerOnly": false,

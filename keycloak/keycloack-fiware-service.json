@@ -735,18 +735,18 @@
     {
       "id": "d2a02ef8-49fc-4901-98c1-8a17ec0fc192",
       "clientId": "orion-pep",
-      "adminUrl": "http://ramp_iot-orion",
-      "baseUrl": "http://ramp_iot-orion",
+      "adminUrl": "http://ramp_iiot-orion",
+      "baseUrl": "http://ramp_iiot-orion",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://ramp_iot-orion"
+        "http://ramp_iiot-orion"
       ],
       "webOrigins": [
-        "http://ramp_iot-orion"
+        "http://ramp_iiot-orion"
       ],
       "notBefore": 0,
       "bearerOnly": false,

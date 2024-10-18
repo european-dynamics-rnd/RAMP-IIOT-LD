@@ -11,7 +11,7 @@ services:
     container_name: ${PROJECT_NAME:-ramp}-keycloak-db
     init: true
     networks:
-      - ramp_iot
+      - ramp_iiot
     volumes:
       - ramp-keycloak-db:/var/lib/postgresql/data
       # Populate Keycloak with the demo data
@@ -36,7 +36,7 @@ services:
       - "127.0.0.1:${KEYCLOAK_TLS_PORT}:${KEYCLOAK_TLS_PORT}" # available to localhost
       # - "${KEYCLOAK_TLS_PORT}:${KEYCLOAK_TLS_PORT}"  # Public available to internet
     networks:
-      - ramp_iot
+      - ramp_iiot
     environment:
       # KC_HOSTNAME_URL : https://URL_OF_CEYCLOAK:8443
       KC_DB : postgres
@@ -57,7 +57,7 @@ services:
 
   kong:
     labels:
-      org.eurodyn: 'ramp_iot'
+      org.eurodyn: 'ramp_iiot'
     image: "quay.io/fiware/kong:0.5.7"
     hostname: "kong"
     user: "kong"
@@ -65,7 +65,7 @@ services:
       - ${KONG_PORT}:${KONG_PORT} # available to localhost
     # - ${KONG_PORT}:${KONG_PORT} # Public available to internet
     networks:
-      - ramp_iot
+      - ramp_iiot
     environment:
       KONG_DATABASE: "off"
       KONG_PROXY_LISTEN: "0.0.0.0:${KONG_PORT} ssl"
@@ -103,6 +103,6 @@ services:
       retries: 10
 
 # networks:
-#   ramp_iot:
+#   ramp_iiot:
 #     external: true
-#     name: ramp_iot
+#     name: ramp_iiot
