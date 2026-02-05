@@ -9,15 +9,12 @@ export $(cat .env | grep "#" -v)
 command="$1"
 
 BASE_DOCKER_YML="-f docker-compose.yml"
-QUANTUMLEAP_YML=" -f quantumleap.yml"
 JSON_IOT_AGENT_YML=" -f iot-agent-json.yml"
 MQTT_IOT_AGENT_YML=" -f iot-agent-mqtt.yml"
 # Docker with IoT JSON Agent
 FINAL_DOCKER_YML="$BASE_DOCKER_YML $JSON_IOT_AGENT_YML" 
 # Docker with IoT MQTT Agent
 # FINAL_DOCKER_YML="$BASE_DOCKER_YML $MQTT_IOT_AGENT_YML"
- # Docker with Timescale and QuantumLeap/CrateDB
-# FINAL_DOCKER_YML="$BASE_DOCKER_YML $JSON_IOT_AGENT_YML $QUANTUMLEAP_YML" 
 
 dockerCmd="docker compose"
 

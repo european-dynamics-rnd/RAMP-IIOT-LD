@@ -64,9 +64,6 @@ You can use the following commands:
 3. ```./getMintakaSensors.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
 4. ```./getMintakaSensorsToken.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
 
-### Quantumleap and CrateDB
-If the [QuantumLeap API](https://app.swaggerhub.com/apis/smartsdk/ngsi-tsdb/0.8.3) is needed you can add the quantumleap.yml to the "./service" file.
-You need to subscribe for each sensor type or sensor ID. YOu can use the ```./subscribeQuantumLeap_PM_SENSOR.sh``` to subscribe to any measurements from PM_SENSOR. The data are saved on the CrateDB (localhost:4200) to access the web-interface
 
 ## Keyclock, create new realm
 **The following procedure is NOT required to run the demo. The following step NEEDS TO BE PERFORMED when you need to run ANYTHING else except the current demo.**    

@@ -8,7 +8,6 @@ The main components of the RAMP IIoT LD platform are:
 3. [Keycloak](https://www.keycloak.org/) as single sign-on with identity and access management.
 4. [Kong](https://github.com/FIWARE/kong-plugins-fiware) as PEP (Policy Enforcement Point) proxy for Orion-LD and Mintaka.
 5. [TimescaleDB](https://www.timescale.com/) to store all entities received by Orion-LD.
-6. [Quantumleap](https://github.com/orchestracities/ngsi-timeseries-api) and [CrateDB](https://cratedb.com) for compatibility with older RAMP-IoT installation. Do not use for new installations.
 
 ![RAMP IIoT LD Architecture](RAMP-IIOT.png)
 
