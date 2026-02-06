@@ -1,0 +1,13 @@
+    {
+      "id": "urn:ngsi-ld:ramp-iot:device-id-001",
+      "type": "ramp-iot",
+      "@context": [
+        "http://ld-context/merge_data_model.jsonld"
+      ],
+      "phaseVoltage": {
+        "type": "Property",
+        "value": 223.6,
+        "unitCode": "2G",
+        "observedAt": "2023-09-15T16:04:49Z"
+      }
+    }  

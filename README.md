@@ -27,6 +27,24 @@ Disk space for database
 See databaseTable_attributes.txt for more info
 
 
+# Integration testing
+
+An integration testing have been developed with the pytest. The integration testing includes the Orion-LD, TROE-Mintaka and Kong. Also the multi tenant functionality of Orion is tested.
+To run the integration testing, the system needs to be up and running.
+1. ./service start
+2. cd integration_testing
+3. pytest -vvv
+
+
+
+
+# Seting up the Prometheus alerts
+
+Navigate to the IP:9090/graph and add a graph with the following query
+```
+rate(ngsildRequests[10m]) 
+```
+Set a values to the alert to be a little less than the normal trafic 
 
 # Monitoring
 

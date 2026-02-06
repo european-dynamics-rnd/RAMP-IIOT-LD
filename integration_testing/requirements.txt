@@ -1,0 +1,5 @@
+docker_py==1.10.6
+pytest==7.4.3
+python-dotenv==1.0.0
+Requests==2.31.0
+urllib3==2.1.0

@@ -2,3 +2,4 @@ demo/token.txt
 demo/tokenMintaka.txt
 ssh
 .vscode/task.json
+integration_testing/__pycache__/
