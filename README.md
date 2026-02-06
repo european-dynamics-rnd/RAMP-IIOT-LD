@@ -96,7 +96,7 @@ rate(ngsildRequests[10m])
 Set a values to the alert to be a little less than the normal trafic 
 
 
-# Loki (Log Aggregation)
+### Loki (Log Aggregation)
 
 [Loki](https://grafana.com/oss/loki/) collects and indexes logs from all Docker containers. [Promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) is deployed alongside to automatically discover containers and ship their logs to Loki.
 
@@ -118,7 +118,52 @@ curl -s 'http://localhost:3100/loki/api/v1/query_range' \
 
 To get a full dashboard, connect [Grafana](https://grafana.com/) and add Loki (`http://loki:3100`) as a data source.
 
+# Backup
 
+## TimescaleDB Backup
+
+The script `backup_timescale/backup_timescale_db.sh` creates a full backup of **all databases** in the TimescaleDB PostgreSQL cluster, including roles and tablespaces.
+
+### Prerequisites
+
+- The TimescaleDB container (`ramp_iiot-timescale-db`) must be running.
+- Database credentials must be set in `.env.secrets` (requires `ORIONLD_TROE_USER`).
+
+### Usage
+
+```bash
+cd backup_timescale
+./backup_timescale_db.sh
+```
+
+The script will:
+1. Verify the TimescaleDB container is running.
+2. List all databases in the cluster.
+3. Run `pg_dumpall` with progress indication showing the current database and file size.
+4. Compress the output with `gzip`.
+
+Backups are saved to the `backup_timescale/` directory as `ramp_iiot_timescaledb_ALL_backup_<TIMESTAMP>.sql.gz`.
+
+### Restore
+
+```bash
+# Standard restore
+gunzip -c backup_timescale/ramp_iiot_timescaledb_ALL_backup_<TIMESTAMP>.sql.gz \
+  | docker exec -i ramp_iiot-timescale-db psql -U <DB_USER> -d postgres
+
+# If constraint issues occur during restore
+gunzip -c backup_timescale/ramp_iiot_timescaledb_ALL_backup_<TIMESTAMP>.sql.gz \
+  | docker exec -i ramp_iiot-timescale-db psql -U <DB_USER> -d postgres -v ON_ERROR_STOP=0
+```
+
+### Retention (Optional)
+
+To automatically keep only the last N backups, uncomment the `KEEP_BACKUPS` section in the script and adjust the number.
+
+
+
+
+----------
 
 Copyright © 2023-2024 European Dynamics Luxembourg S.A.
 
