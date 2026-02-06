@@ -12,12 +12,7 @@ else
   INSECURE=''
 fi
 
-if [ "$1" = "SSO" ]; then
-  echo "Redicecting to ramp.eu for login"
-  python3 getTokenMintaka_oauth2.py 
-else
-  ./getTokenMintaka.sh
-fi
+./getTokenMintaka.sh
 token=$(cat "tokenMintaka.txt")
 
 KONG_URL='https://'"${HOST}"':'"${KONG_PORT}"'/keycloak-mintaka'

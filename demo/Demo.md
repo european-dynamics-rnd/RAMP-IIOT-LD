@@ -30,19 +30,26 @@ run: ```./setup_demo.sh```, to create a Particular Mater sensor (ID urn:urn:ngsi
 See [tutorials.IoT-Agent-JSON](https://github.com/FIWARE/tutorials.IoT-Agent-JSON/tree/NGSI-LD) to familiarize with the use of Orion-LD and IoT JSON Agent.
 An instance of particular mater sensor is created on the Fiware IoT Agent JSON and the senor data are feed by a POST method (see [demo_data/generate_measurements_pm_sensor.sh](demo_data/generate_measurements_pm_sensor.sh)) to the corresponding end point.
 
+
+TODO add some info about tenants
+
+
+
 ### Query Orion-LD to get the last values  
 You can use the following commands:
-1. ```./getInfo.sh``` : To get the version of the Orion-LD
-2. ```./getInfoToken.sh``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy
-3. ```./getInfoSensors.sh``` : To get the last measurement of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
-4. ```./getInfoSensorsToken.sh``` : To get the last measurement of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
-### Query Mintaka to get access to the temporal NGSI-LD interface 
-1. ```./getMintaka.sh``` : To get the version of the Mintaka
-2. ```./getMintakaToken.sh``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy
-3. ```./getMintakaSensors.sh``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
-4. ```./getMintakaSensorsToken.sh``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+1. ```./getOrionVersion.sh``` : To get the version of the Orion-LD
+2. ```./getOrionVersionViaKong.sh``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy
+3. ```./getDataSensors.sh openiot PM_SENSOR``` : To get the last measurement of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
+4. ```./getDataSensorsViaKong.sh openiot PM_SENSOR``` : To get the last measurement of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+TODO add the for one sensor
 
-When a program with the word "Token" is run, it request the token from the local Keycloak server and supply it with the request to the Kong proxy. See 'getToken.sh', 'getTokenMintaka.sh' are run to request the token from the Keycloak and they save the received token on the 'token.txt' and 'tokenMintaka.txt'.  
+### Query Mintaka to get access to the temporal NGSI-LD interface 
+1. ```./getMintakaInfo.sh``` : To get the version of the Mintaka
+2. ```./getMintakaInfoViaKong.sh``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy
+3. ```./getMintakaSensor.sh openiot urn:ngsi-ld:PM_SENSOR:pm_sensor-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
+4. ```./getMintakaSensorViaKong.sh openiot urn:ngsi-ld:PM_SENSOR:pm_sensor-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+
+When a program with the word "Token" is run, it request the token from the local Keycloak server and supply it with the request to the Kong proxy. See 'getTOrionoken.sh', 'getTokenMintaka.sh' are run to request the token from the Keycloak and they save the received token on the 'token.txt' and 'tokenMintaka.txt'.  
 
 ## Demo with IoT Agent - MQTT
 **IMPORTANT** Enable the corresponding variable in the service.sh file (change the configuration to activate the Docker with IoT MQTT Agent (comment L17 and uncomment L19)) and install the [mosquitto_pub](https://mosquitto.org/download/).
@@ -54,16 +61,19 @@ An instance of energy sensor is created on the Fiware IoT Agent MQTT and the sen
 
 ### Query Orion-LD to get the last values  
 You can use the following commands:
-1. ```./getInfo.sh``` : To get the version of the Orion-LD
-2. ```./getInfoToken.sh``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy
-3. ```./getInfoSensors.sh ENERGY_METER``` : To get the last measurement of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
-4. ```./getInfoSensorsToken.sh ENERGY_METER``` : To get the last measurement of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
-### Query Mintaka to get access to the temporal NGSI-LD interface 
-1. ```./getMintaka.sh``` : To get the version of the Mintaka
-2. ```./getMintakaToken.sh``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy
-3. ```./getMintakaSensors.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
-4. ```./getMintakaSensorsToken.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+1. ```./getOrionVersion.sh``` : To get the version of the Orion-LD
+2. ```./getOrionVersionViaKong.sh``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy
+3. ```./getDataSensors.sh ENERGY_METER``` : To get the last measurement of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
+4. ```./getDataSensorsViaKong.sh ENERGY_METER``` : To get the last measurement of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
 
+### Query Mintaka to get access to the temporal NGSI-LD interface 
+1. ```./getMintakaInfo.sh``` : To get the version of the Mintaka
+2. ```./getMintakaInfoViaKong.sh``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy
+3. ```./getMintakaSensor.sh openiot urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
+4. ```./getMintakaSensorViaKong.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+
+
+TODO replicate the interaction with POSTMAN
 
 ## Keyclock, create new realm
 **The following procedure is NOT required to run the demo. The following step NEEDS TO BE PERFORMED when you need to run ANYTHING else except the current demo.**    
@@ -80,7 +90,7 @@ Go to left menu, on the top, click on master then click on "add" and load the fi
 Add a user, Users with the following credentials admin-user:admin-user, Groups: admin, consumer. PLEASE USE custom user credentials for your own installation. 
 
 ### Setup orion-pep client
-- Go to Clients->orion-pep->Credentials-> Regenerate. Copy/paste key to client_secret in the 'getToken.sh' file. Also update the username, password with your custom credential created before
+- Go to Clients->orion-pep->Credentials-> Regenerate. Copy/paste key to client_secret in the 'getTOrionoken.sh' file. Also update the username, password with your custom credential created before
 - Go to kong-config/kong.yaml: search for "keycloakclientsecret" in the service "orion-keycloak" and paste the key.
 Update the  
 ### Setup mintaka-pep client
@@ -92,52 +102,5 @@ Update the
 
 Now rerun all the commands containing keyword 'Token' to verify the configuration is correct. if the following error appears when you run any of the commands 'parse error: Invalid numeric literal at line 1, column 9', open the file of the command and remove from the end the '|jq', rerun the command to get the actual error. jq is used for the formatting of the return json from Orion-LD and Mintaka.
 
-## SSO from Ramp.eu keycloak
-
-With these option, any user that have been register to the [ramp.eu](https://ramp.eu/). The first step is to setup the SSO (Single sign on) between your Keycloak and Ramp.eu. Use the [ContactUs](https://ramp.eu/#/contactus) to revieve the Client ID and secret. Then:
-
-![SSO_ramp.eu](img/sso_diagram.png)
-
-
-### Set up SSO
-1. Go to keycloak admin interface and log in as admin. 
-2. Navigate the realm with the fiware configuration (ie fiware-server). 
-2. Select 'Identity providers' -> 'Add provider' -> 'Keycloak OpenID connect'
-3. Set: 
-    - Alias (Do not use spaces in the name) ie loginwithramp
-    - Change the display name to 'Login with RAMP'
-    - On Discovery endpoint enter: "https://ramp.eu/auth/realms/ramp/.well-known/openid-configuration"
-    - 'Client authentication' -> select 'Client secret sent as post'
-    - Enter client ID, Client Secret recieved from ramp team.
-    - Save
-4. Go to the created Identity provider (loginwithramp) -> Mapper -> Add mapper and set:
-    - Name 
-    - 'Sync mode override' -> Force
-    - Mapper type -> Advanced Claim to Group
-    - Claims-> Key: email, Value: ".*"
-    - Enable Regex claims Values
-    - Group-> select consumer
-<!-- ![identityProviderMapper](img/identityProviderMapper.png) -->
- 5. Go to both clients that you need to authenticate (ie orion-pep, mintaka-pep) and add 'http://localhost:8080/*' to Valid redirect URIs
- 6. Go to 'getToken_oauth2.py' and 'getTokenMintaka_oauth2.py' and replace the localKeycloakServer, keycloakClient, keycloakClientSecret variables.
- 7. Make your Keycloak available to the internet. Edit 'keycloak.yml' configuration on ports. Especially, disable access to port 8080 !!! 
- 
-  
-### Query Orion-LD to get the last values with SSO 
-
-python3 and the package 'oauth2_client' (pip install oauth2-client) needs to be installed in your environment. During the process of running any of the following commands, a URL needs to be opened on your browser to be authenticated on the ramp.eu. You need to update the localKeycloakServer, keycloakClient, keycloakClientSecret in both 'getToken_oauth2.py' and 'getTokenMintaka_oauth2.py' files to point to your Keycloak. IMPORTANT Keycloak url need to be a fully qualified domain name (FQDN).
-When you use the SSO as command line argument the following scripts will execute 'getToken_oauth2.py' or 'getTokenMintaka_oauth2.py' instead of the 'getToken.sh' and 'getTokenMintaka.sh'.
-
-**Important the local Auth2 client will accept connection on 8080. Please have the port 8080 free** 
-
-
-You can use the following commands:
-1. ```./getInfoToken.sh SSO``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy and credentials from ramp.eu
-2. ```./getInfoSensorsToken.sh SSO``` : To get the last measurement of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy and credentials from ramp.eu
-### Query Mintaka to get access to the temporal NGSI-LD interface  with SSO 
-1. ```./getMintakaToken.sh SSO``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy and credentials from ramp.eu
-2. ```./getMintakaSensorsToken.sh SSO``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy and credentials from ramp.eu
-
-![SSO_screencapture](img/SSO_screencapture.gif)
 
 

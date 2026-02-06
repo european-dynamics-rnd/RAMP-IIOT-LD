@@ -3,6 +3,7 @@ version: "3.8"
 include:
 - keycloak.yml
 - temporal.yml
+# - monitoring.yml
 
 services:
   # @context file is served from here
@@ -34,6 +35,8 @@ services:
       - ramp_iiot-timescale-db
     networks:
       - ramp_iiot
+    expose: # for monitoring via prometheus
+      - 8000
     # expose:
     #   - "${ORION_LD_PORT}:${ORION_LD_PORT}"
     ports:   # for communication outside docker environment BUT only localhost
@@ -46,7 +49,7 @@ services:
       - ORIONLD_MONGO_HOST=ramp_iiot-mongo-db
       - ORIONLD_MULTI_SERVICE=TRUE
       - ORIONLD_DISABLE_FILE_LOG=TRUE
-    command: -logLevel DEBUG  -troePoolSize 10 -forwarding 
+    command: -logLevel DEBUG  -troePoolSize 10 -forwarding -mongocOnly
     healthcheck:
       test: curl --fail -s http://ramp_iiot-orion:${ORION_LD_PORT}/version || exit 1
       interval: 10s

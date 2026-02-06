@@ -13,7 +13,7 @@ if [ "$1" = "SSO" ]; then
   echo "Redicecting to ramp.eu for login"
   python3 getToken_oauth2.py 
 else
-  ./getToken.sh
+  ./getOrionToken.sh
 fi
 token=$(cat "token.txt")
 

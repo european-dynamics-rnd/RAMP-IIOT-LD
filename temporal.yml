@@ -40,7 +40,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
     command: ["postgres", "-c", "log_statement=none"]
     expose:
-      - "${TIMESCALE_PORT}:${TIMESCALE_PORT}"
+      - "${TIMESCALE_PORT}"
     networks:
       - ramp_iiot
     volumes:

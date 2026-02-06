@@ -28,7 +28,11 @@ See databaseTable_attributes.txt for more info
 
 
 
+# Monitoring
 
+
+Loki needs special permissions for the attached volume. Run it once and get how the naming of the volume is. Is should be <COMPOSE_PROJECT_NAME>_circuloos-loki-data (as named in the log-monitoring.yml). 
+Replace the name on the ./create_loki_volumes.sh and run it. Then run again the loki, wait some 1 min. Lot of errors will appear for not having permissions to write on disk. Restart once again and should working.
 
 
 
