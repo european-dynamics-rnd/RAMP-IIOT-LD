@@ -29,11 +29,11 @@ See databaseTable_attributes.txt for more info
 
 # Integration testing
 
-An integration testing have been developed with the pytest. The integration testing includes the Orion-LD, TROE-Mintaka and Kong. Also the multi tenant functionality of Orion is tested.
+An integration testing have been developed with the pytest. The integration testing includes the Orion-LD, TROE-Mintaka and Kong. Also the multi tenant functionality of Orion is tested. The required packages are included into the ```integration_testing/requirements.txt```
 To run the integration testing, the system needs to be up and running.
-1. ./service start
-2. cd integration_testing
-3. pytest -vvv
+1. ```./service start```
+2. ```cd integration_testing```
+3. ```pytest -vvv```
 
 
 
