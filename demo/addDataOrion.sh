@@ -16,7 +16,6 @@ TENANT="$1"
 
 curl -iL -X POST  'http://'"${HOST}"':'"${ORION_LD_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
 -H 'NGSILD-Tenant: '"${TENANT}"'' \
--H 'NGSILD-Path: /' \
 -H 'Content-Type: application/ld+json' \
 -d @$jsonFile
 echo -e

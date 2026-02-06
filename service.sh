@@ -9,10 +9,11 @@ export $(cat .env | grep "#" -v)
 command="$1"
 
 BASE_DOCKER_YML="-f docker-compose.yml"
-JSON_IOT_AGENT_YML=" -f iot-agent-json.yml"
-MQTT_IOT_AGENT_YML=" -f iot-agent-mqtt.yml"
+# JSON_IOT_AGENT_YML=" -f iot-agent-json.yml"
+# MQTT_IOT_AGENT_YML=" -f iot-agent-mqtt.yml"
+
 # Docker with IoT JSON Agent
-FINAL_DOCKER_YML="$BASE_DOCKER_YML $JSON_IOT_AGENT_YML" 
+# FINAL_DOCKER_YML="$BASE_DOCKER_YML $JSON_IOT_AGENT_YML" 
 # Docker with IoT MQTT Agent
 # FINAL_DOCKER_YML="$BASE_DOCKER_YML $MQTT_IOT_AGENT_YML"
 

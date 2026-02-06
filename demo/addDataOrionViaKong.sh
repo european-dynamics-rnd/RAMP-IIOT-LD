@@ -27,7 +27,6 @@ KONG_URL='https://'"${HOST}"':'"${KONG_PORT}"'/keycloak-orion'
 
 curl -iL $INSECURE -X POST  ''"${KONG_URL}"'/ngsi-ld/v1/entityOperations/upsert' \
 -H 'NGSILD-Tenant: '"${TENANT}"'' \
--H 'NGSILD-Path: /' \
 -H 'Content-Type: application/ld+json' \
 -H 'Accept: application/json' \
 -H 'Authorization: Bearer '"${token}"' ' \
