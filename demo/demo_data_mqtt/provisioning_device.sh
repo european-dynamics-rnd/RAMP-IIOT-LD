@@ -11,8 +11,8 @@ echo -e 'Provition service:' "${1}"
 curl -s -X POST \
   'http://localhost:'"${IOTA_MQTT_NORTH_PORT}"'/iot/devices' \
   -H 'Content-Type: application/json' \
-  -H 'NGSILD-Tenant: openiot' \
-  -H 'fiware-service: openiot' \
+  -H 'NGSILD-Tenant: openiot_mqtt' \
+  -H 'fiware-service: openiot_mqtt' \
   -H 'fiware-servicepath: /' \
   -d @$1
 

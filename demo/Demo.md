@@ -36,6 +36,7 @@ TODO add some info about tenants
 
 
 ### Query Orion-LD to get the last values  
+IOTA agent EOL -> all JSON
 You can use the following commands:
 1. ```./getOrionVersion.sh``` : To get the version of the Orion-LD
 2. ```./getOrionVersionViaKong.sh``` : To get the version of the Orion-LD using KONG as PEP (Policy Enforcement Point) proxy
@@ -69,8 +70,8 @@ You can use the following commands:
 ### Query Mintaka to get access to the temporal NGSI-LD interface 
 1. ```./getMintakaInfo.sh``` : To get the version of the Mintaka
 2. ```./getMintakaInfoViaKong.sh``` : To get the version of the Mintaka using KONG as PEP (Policy Enforcement Point) proxy
-3. ```./getMintakaSensor.sh openiot urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
-4. ```./getMintakaSensorViaKong.sh urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
+3. ```./getMintakaSensor.sh openiot_mqtt urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
+4. ```./getMintakaSensorViaKong.sh openiot_mqtt urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
 
 
 TODO replicate the interaction with POSTMAN
