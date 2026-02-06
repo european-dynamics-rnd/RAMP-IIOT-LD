@@ -1,7 +1,11 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ENV_FILE="${SCRIPT_DIR}/../../.env"
 
-export $(cat ../../.env | grep "#" -v)
+set -a
+source <(grep -v '^#' "$ENV_FILE" | grep -v '^\s*$')
+set +a
 set -e
 
 generate_random_number() {
