@@ -37,8 +37,57 @@ To run the integration testing, the system needs to be up and running.
 
 
 
+# Monitoring
 
-# Seting up the Prometheus alerts
+
+## Uptime Kuma
+
+[Uptime Kuma](https://github.com/louislam/uptime-kuma) is a self-hosted monitoring tool (similar to UptimeRobot) that provides a dashboard to track the availability of all platform services.
+
+### Services Monitored
+
+| Service | Check Type | Endpoint |
+|---|---|---|
+| Orion-LD Context Broker | HTTP | `http://ramp_iiot-orion:1026/version` |
+| Mintaka Temporal API | HTTP | `http://ramp_iiot-mintaka:8086/info` |
+| MongoDB | TCP Port | `ramp_iiot-mongo-db:27017` |
+| TimescaleDB | TCP Port | `ramp_iiot-timescale-db:5432` |
+| Keycloak IAM | HTTP | `http://keycloak:8080/health/ready` |
+| Kong API Gateway | TCP Port | `kong:443` |
+| IoT Agent MQTT | HTTP | `http://iot-agent-mqtt:4042/iot/about` |
+| Mosquitto MQTT Broker | TCP Port | `mosquitto:1883` |
+| Prometheus | HTTP | `http://prometheus:9090/-/healthy` |
+| Alertmanager | HTTP | `http://prometheus-alertmanager:9093/-/healthy` |
+| LD Context Server | HTTP | `http://ramp_iiot-ld-context/merge_data_model.jsonld` |
+
+### Setup
+
+1. Enable monitoring in `docker-compose.yml` by uncommenting `- monitoring.yml` from the `include` section.
+
+2. Start the stack:
+   ```bash
+   ./service.sh start
+   ```
+
+3. Install the Python dependency and run the setup script to auto-configure all monitors:
+   ```bash
+   pip install uptime-kuma-api
+   cd monitoring
+   ./setup_uptime_kuma.sh
+   ```
+
+4. Access the dashboard at **http://localhost:3001**. Default credentials are configured via the `.env` file:
+   - `UPTIME_KUMA_USER` (default: `admin`)
+   - `UPTIME_KUMA_PASSWORD` (default: `Pa55w0rd!`)
+
+### Configuration
+
+The Uptime Kuma service is defined in `monitoring.yml` and persists its data in the `uptime-kuma-data` Docker volume. It runs on port `3001` (configurable via `UPTIME_KUMA_PORT` in `.env`) and is bound to `127.0.0.1` (localhost only).
+
+The setup script (`monitoring/setup_uptime_kuma.sh`) is idempotent — running it again will skip monitors that already exist. To reconfigure, delete existing monitors from the Uptime Kuma UI and re-run the script.
+
+## Prometheus Alerts
+### Seting up the Prometheus alerts
 
 Navigate to the IP:9090/graph and add a graph with the following query
 ```
@@ -46,12 +95,28 @@ rate(ngsildRequests[10m])
 ```
 Set a values to the alert to be a little less than the normal trafic 
 
-# Monitoring
 
+# Loki (Log Aggregation)
 
-Loki needs special permissions for the attached volume. Run it once and get how the naming of the volume is. Is should be <COMPOSE_PROJECT_NAME>_circuloos-loki-data (as named in the log-monitoring.yml). 
-Replace the name on the ./create_loki_volumes.sh and run it. Then run again the loki, wait some 1 min. Lot of errors will appear for not having permissions to write on disk. Restart once again and should working.
+[Loki](https://grafana.com/oss/loki/) collects and indexes logs from all Docker containers. [Promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) is deployed alongside to automatically discover containers and ship their logs to Loki.
 
+Loki and Promtail are included in `monitoring.yml` — no manual volume permission setup is required.
+
+### Querying Logs
+
+Loki exposes its API on `http://localhost:3100`. You can query logs directly:
+
+```bash
+# Logs from the Orion-LD container (last hour)
+curl -s 'http://localhost:3100/loki/api/v1/query_range' \
+  --data-urlencode 'query={container="ramp_iiot-orion"}' | python3 -m json.tool
+
+# Filter by service name
+curl -s 'http://localhost:3100/loki/api/v1/query_range' \
+  --data-urlencode 'query={service="ramp_iiot-orion"} |= "ERROR"' | python3 -m json.tool
+```
+
+To get a full dashboard, connect [Grafana](https://grafana.com/) and add Loki (`http://loki:3100`) as a data source.
 
 
 

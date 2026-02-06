@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s  # By default, scrape targets every 15 seconds.
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - 'prometheus-alertmanager:9093'  # Adjust with your Alertmanager address
+      
+rule_files:
+  - "alert.rules.yml"
+
+
+scrape_configs:
+  - job_name: 'ORION_LD-ramp_iot'
+    static_configs:
+      - targets: ['ramp_iiot-orion:8000'] 
+    metrics_path: /metrics
+    scheme: http
+
+

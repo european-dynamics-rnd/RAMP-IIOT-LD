@@ -2,7 +2,7 @@
 include:
 - keycloak.yml
 - temporal.yml
-# - monitoring.yml
+- monitoring.yml
 
 services:
   # @context file is served from here
