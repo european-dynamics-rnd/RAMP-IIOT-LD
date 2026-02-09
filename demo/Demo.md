@@ -24,14 +24,92 @@ The main docker-compose file(docker-compose.yml) include additional compose file
 
 **IMPORTANT** The database of Keycloak (volume ramp-keycloak-db) have been initialised with default values for the purposes of the demo. To disable it comment line " - ${PWD}/keycloak/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql" on the [keycloak.yml](../keycloak.yml), remove the image (```docker volume rm ramp_iiot_ramp-keycloak-db```), restart docker-compose and follow the instruction [here](#keyclock) for setup.
 
-## Demo with IoT Agent - JSON
+## Demo with JSON-LD
 A demo script has been developed. See [demo_data](./demo_data/) for more details.
-run: ```./setup_demo.sh```, to create a Particular Mater sensor (ID urn:urn:ngsi-ld:ENERGY_METER:energymeter-001) and add 10 random measurements.
-See [tutorials.IoT-Agent-JSON](https://github.com/FIWARE/tutorials.IoT-Agent-JSON/tree/NGSI-LD) to familiarize with the use of Orion-LD and IoT JSON Agent.
-An instance of particular mater sensor is created on the Fiware IoT Agent JSON and the senor data are feed by a POST method (see [demo_data/generate_measurements_pm_sensor.sh](demo_data/generate_measurements_pm_sensor.sh)) to the corresponding end point.
 
+Run `./setup_demo.sh` to create a building entity and a Particulate Matter sensor (`urn:ngsi-ld:PM_SENSOR:pm_sensor-001`) with 10 random measurements.
 
-TODO add some info about tenants
+The script generates NGSI-LD compliant JSON-LD payloads and posts them directly to Orion-LD via the `/ngsi-ld/v1/entityOperations/upsert` endpoint. Each measurement includes:
+- **pm25** — PM2.5 concentration (unit: GQ)
+- **temperature** — Temperature (unit: CEL)
+- **relativeHumidity** — Relative Humidity (unit: P1)
+- **observedAt** — ISO 8601 timestamp for each property
+
+### Example JSON-LD Payload
+
+```json
+[{
+  "id": "urn:ngsi-ld:PM_SENSOR:pm_sensor-001",
+  "type": "PM_SENSOR",
+  "pm25": {
+    "type": "Property",
+    "value": 32.9,
+    "unitCode": "GQ",
+    "observedAt": "2026-02-06T15:05:24Z"
+  },
+  "temperature": {
+    "type": "Property",
+    "value": 29.4,
+    "unitCode": "CEL",
+    "observedAt": "2026-02-06T15:05:24Z"
+  },
+  "relativeHumidity": {
+    "type": "Property",
+    "value": 31.1,
+    "unitCode": "P1",
+    "observedAt": "2026-02-06T15:05:24Z"
+  },
+  "dateObserved": {
+    "type": "Property",
+    "value": {
+      "@type": "DateTime",
+      "@value": "2026-02-06T15:05:24Z"
+    }
+  },
+  "@context": [
+    "http://ramp_iiot-ld-context/merge_data_model.jsonld",
+    "http://ramp_iiot-ld-context/ngsi-ld-core-context-v1.7.jsonld"
+  ]
+}]
+```
+
+### Sending Individual Measurements
+
+Use `generate_measurements_pm_sensor.sh` to send a single measurement:
+```bash
+# Random values
+cd demo_data
+./generate_measurements_pm_sensor.sh pm_sensor-001
+
+# Specific values: sensor_id pm25 temperature humidity
+./generate_measurements_pm_sensor.sh pm_sensor-001 11.5 22.3 75.8
+
+# With a custom tenant
+./generate_measurements_pm_sensor.sh pm_sensor-001 11.5 22.3 75.8 mytenant
+```
+
+### Simulating Continuous Traffic
+
+Use `simulate_sensor_traffic.sh` to send measurements at random intervals (2–20s) simulating realistic sensor traffic:
+```bash
+# Default: 100 steps for pm_sensor-001
+./simulate_sensor_traffic.sh
+
+# Custom: 50 steps for pm_sensor-002
+./simulate_sensor_traffic.sh 50 pm_sensor-002
+
+# Custom delays: 200 steps, 5–30s apart
+./simulate_sensor_traffic.sh 200 pm_sensor-001 5 30
+```
+
+### Multi-Tenancy
+
+Orion-LD supports multi-tenancy through the `NGSILD-Tenant` header. Each tenant has its own isolated data space in the databases (MongoDB and TimescaleDB). This is useful when:
+- Multiple applications or departments share the same Orion-LD instance but need data isolation.
+- Different IoT deployments (e.g., different buildings or sites) need separate data stores.
+- Access control and data governance require logical separation between datasets.
+
+The demo uses the `openiot` tenant by default. You can specify a different tenant as an argument to the measurement scripts. When querying data, use the same tenant value in all `getDataSensors.sh` and `getMintakaSensor.sh` commands.
 
 
 
