@@ -148,6 +148,11 @@ You can use the following commands:
 3. ```./getMintakaSensor.sh openiot_mqtt urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the latest 5 measurements of the pm_sensor-001 (The sensors was created with the setup_demo.sh script)
 4. ```./getMintakaSensorViaKong.sh openiot_mqtt urn:ngsi-ld:ENERGY_METER:energymeter-001``` : To get the 5 latest measurements of the pm_sensor-001 using KONG as PEP (Policy Enforcement Point) proxy
 
+## Postman Collections
+Two Postman collections are included to simplify API interaction:
+1. [RAMP-IoT-LD_Demo_JSON-LD.postman_collection.json](./RAMP-IoT-LD_Demo_JSON-LD.postman_collection.json) – Includes requests for Orion-LD and Mintaka (Direct & via Kong).
+2. [RAMP-IoT-LD_Demo_MQTT.postman_collection.json](./RAMP-IoT-LD_Demo_MQTT.postman_collection.json) – Includes requests for provisioning the MQTT IoT Agent and querying entities.
+
 ## Keycloak, create new realm
 **The following procedure is NOT required to run the demo. The following step NEEDS TO BE PERFORMED when you need to run ANYTHING else except the current demo.**    
 

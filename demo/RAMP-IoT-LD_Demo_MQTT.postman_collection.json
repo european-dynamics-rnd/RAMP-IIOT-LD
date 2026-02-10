@@ -1,0 +1,734 @@
+{
+  "info": {
+    "_postman_id": "c21c42a0-4867-4b94-8f48-bfa9ce27d940",
+    "name": "RAMP-IoT-LD Demo - MQTT IoT Agent",
+    "description": "Postman collection for RAMP-IoT-LD Demo with MQTT IoT Agent. This collection includes requests to interact with IoT Agent MQTT, Orion-LD Context Broker and Mintaka temporal API for ENERGY_METER sensors. Run the setup_demo_mqtt.sh command to generate the testing data.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9192452"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get Orion Token from Keycloak",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"orion_token\", jsonData.access_token);",
+                  "    console.log(\"Orion token saved:\", jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{keycloak_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{keycloak_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{orion_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{orion_client_secret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{HOST}}:{{KEYCLOAK_TLS_PORT}}/realms/fiware-server/protocol/openid-connect/token",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KEYCLOAK_TLS_PORT}}",
+              "path": [
+                "realms",
+                "fiware-server",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Mintaka Token from Keycloak",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set(\"mintaka_token\", jsonData.access_token);",
+                  "    console.log(\"Mintaka token saved:\", jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{keycloak_username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{keycloak_password}}",
+                  "type": "text"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{mintaka_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{mintaka_client_secret}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{HOST}}:{{KEYCLOAK_TLS_PORT}}/realms/fiware-server/protocol/openid-connect/token",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KEYCLOAK_TLS_PORT}}",
+              "path": [
+                "realms",
+                "fiware-server",
+                "protocol",
+                "openid-connect",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orion-LD Direct",
+      "item": [
+        {
+          "name": "Get Orion-LD Version",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{HOST}}:{{ORION_LD_PORT}}/version",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{ORION_LD_PORT}}",
+              "path": [
+                "version"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Energy Meters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/ld+json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{HOST}}:{{ORION_LD_PORT}}/ngsi-ld/v1/entities?type=ENERGY_METER",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{ORION_LD_PORT}}",
+              "path": [
+                "ngsi-ld",
+                "v1",
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "ENERGY_METER"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific Energy Meter",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/ld+json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{HOST}}:{{ORION_LD_PORT}}/ngsi-ld/v1/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{ORION_LD_PORT}}",
+              "path": [
+                "ngsi-ld",
+                "v1",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orion-LD via Kong",
+      "item": [
+        {
+          "name": "Get Orion-LD Version via Kong",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{orion_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-orion/version",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-orion",
+                "version"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Energy Meters via Kong",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/ld+json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{orion_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-orion/ngsi-ld/v1/entities?type=ENERGY_METER",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-orion",
+                "ngsi-ld",
+                "v1",
+                "entities"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "ENERGY_METER"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific Energy Meter via Kong",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/ld+json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{orion_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-orion/ngsi-ld/v1/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-orion",
+                "ngsi-ld",
+                "v1",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mintaka Direct",
+      "item": [
+        {
+          "name": "Get Mintaka Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{HOST}}:{{MINTAKA_PORT}}/info",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{MINTAKA_PORT}}",
+              "path": [
+                "info"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Energy Meter Temporal Data (Last 5)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{HOST}}:{{MINTAKA_PORT}}/temporal/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001?lastN=5",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{MINTAKA_PORT}}",
+              "path": [
+                "temporal",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ],
+              "query": [
+                {
+                  "key": "lastN",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Energy Meter Temporal Data (Time Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://{{HOST}}:{{MINTAKA_PORT}}/temporal/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001?timerel=between&timeAt=2026-02-01T00:00:00Z&endTimeAt=2026-02-09T23:59:59Z",
+              "protocol": "http",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{MINTAKA_PORT}}",
+              "path": [
+                "temporal",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ],
+              "query": [
+                {
+                  "key": "timerel",
+                  "value": "between"
+                },
+                {
+                  "key": "timeAt",
+                  "value": "2026-02-01T00:00:00Z"
+                },
+                {
+                  "key": "endTimeAt",
+                  "value": "2026-02-09T23:59:59Z"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mintaka via Kong",
+      "item": [
+        {
+          "name": "Get Mintaka Info via Kong",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mintaka_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-mintaka/info",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-mintaka",
+                "info"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Energy Meter Temporal Data via Kong (Last 5)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mintaka_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-mintaka/temporal/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001?lastN=5",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-mintaka",
+                "temporal",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ],
+              "query": [
+                {
+                  "key": "lastN",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Energy Meter Temporal Data via Kong (Time Range)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "NGSILD-Tenant",
+                "value": "{{TENANT}}",
+                "type": "text"
+              },
+              {
+                "key": "Link",
+                "value": "<{{CONTEXT}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mintaka_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://{{HOST}}:{{KONG_PORT}}/keycloak-mintaka/temporal/entities/urn:ngsi-ld:ENERGY_METER:energymeter-001?timerel=between&timeAt=2026-02-01T00:00:00Z&endTimeAt=2026-02-09T23:59:59Z",
+              "protocol": "https",
+              "host": [
+                "{{HOST}}"
+              ],
+              "port": "{{KONG_PORT}}",
+              "path": [
+                "keycloak-mintaka",
+                "temporal",
+                "entities",
+                "urn:ngsi-ld:ENERGY_METER:energymeter-001"
+              ],
+              "query": [
+                {
+                  "key": "timerel",
+                  "value": "between"
+                },
+                {
+                  "key": "timeAt",
+                  "value": "2026-02-01T00:00:00Z"
+                },
+                {
+                  "key": "endTimeAt",
+                  "value": "2026-02-09T23:59:59Z"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "HOST",
+      "value": "localhost",
+      "type": "string"
+    },
+    {
+      "key": "ORION_LD_PORT",
+      "value": "1026",
+      "type": "string"
+    },
+    {
+      "key": "MINTAKA_PORT",
+      "value": "8086",
+      "type": "string"
+    },
+    {
+      "key": "KEYCLOAK_TLS_PORT",
+      "value": "8443",
+      "type": "string"
+    },
+    {
+      "key": "KONG_PORT",
+      "value": "443",
+      "type": "string"
+    },
+    {
+      "key": "IOTA_MQTT_NORTH_PORT",
+      "value": "4042",
+      "type": "string"
+    },
+    {
+      "key": "IOTA_MQTT_SOUTH_PORT",
+      "value": "7897",
+      "type": "string"
+    },
+    {
+      "key": "CONTEXT",
+      "value": "http://ramp_iiot-ld-context/merge_data_model.jsonld",
+      "type": "string"
+    },
+    {
+      "key": "CORE_CONTEXT",
+      "value": "http://ramp_iiot-ld-context/ngsi-ld-core-context-v1.7.jsonld",
+      "type": "string"
+    },
+    {
+      "key": "TENANT",
+      "value": "openiot_mqtt",
+      "type": "string"
+    },
+    {
+      "key": "orion_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "mintaka_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "keycloak_username",
+      "value": "admin-user",
+      "type": "string"
+    },
+    {
+      "key": "keycloak_password",
+      "value": "admin-user",
+      "type": "string"
+    },
+    {
+      "key": "orion_client_id",
+      "value": "orion-pep",
+      "type": "string"
+    },
+    {
+      "key": "orion_client_secret",
+      "value": "yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk",
+      "type": "string"
+    },
+    {
+      "key": "mintaka_client_id",
+      "value": "mintaka-pep",
+      "type": "string"
+    },
+    {
+      "key": "mintaka_client_secret",
+      "value": "zQXGjcxPWuF7YBpAiFtaIOEIOrCiWqeH",
+      "type": "string"
+    },
+    {
+      "key": "FIWARE_SERVICE",
+      "value": "ENERGY_METER",
+      "type": "string"
+    },
+    {
+      "key": "FIWARE_SERVICEPATH",
+      "value": "/",
+      "type": "string"
+    },
+    {
+      "key": "API_KEY",
+      "value": "ENERGY_METER_API_KEY",
+      "type": "string"
+    }
+  ]
+}
