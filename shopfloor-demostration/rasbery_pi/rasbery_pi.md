@@ -13,7 +13,7 @@ sudo usermod -aG docker ${USER}
 
 ```
 
-## Install emmulator
+## Install emulator
 
 Lot of images have not native images for rasberryPi architecture linux/arm64/v8 so we use QEMU to emulate amd64.
 ```
