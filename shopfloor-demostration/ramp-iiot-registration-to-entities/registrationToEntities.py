@@ -15,10 +15,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-DEFAULT_CONTEXT=os.getenv('DEFAULT_CONTEXT','http://circuloos-ld-context/circuloos-context.jsonld')
+DEFAULT_CONTEXT=os.getenv('DEFAULT_CONTEXT','http://ramp-iiot-ld-context/ramp-iiot-context.jsonld')
 HOST =os.getenv('PROXY_HOST','0.0.0.0')
 PORT =os.getenv('PROXY_PORT',8888) 
-HTTP_SERVICES_BROKER_URL=os.getenv('HTTP_SERVICES_BROKER_URL','https://circuloos-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert') 
+HTTP_SERVICES_BROKER_URL=os.getenv('HTTP_SERVICES_BROKER_URL','https://ramp-iiot-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert') 
 
 USERNAME=os.getenv('USERNAME',"")
 PASSWORD=os.getenv('PASSWORD',"")
@@ -26,9 +26,9 @@ CLIENT_SECRET=os.getenv('CLIENT_SECRET',"")
 
 # GENERAL_TENANT=test_federation
 
-def get_token_circuloos():
+def get_token_ramp-iiot():
 
-    KEYCLOCK_URL = "https://circuloos-platform.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token"
+    KEYCLOCK_URL = "https://ramp-iiot-platform.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token"
 
     payload = f'username={USERNAME}&password={PASSWORD}&grant_type=password&client_id=orion-pep&client_secret={CLIENT_SECRET}'
     headers = {
@@ -101,7 +101,7 @@ def proxy():
     data=fromRegistrationToEntity(data)
     data=f"[{json.dumps(data)}]"
     
-    token=get_token_circuloos()
+    token=get_token_ramp-iiot()
     headers["Authorization"] = "Bearer " + token
     
     

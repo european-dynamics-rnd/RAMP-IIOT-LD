@@ -13,7 +13,7 @@ curl -iL -X POST  'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/entityOper
     "id": "urn:ngsi-ld:ed:ieq-001",
     "type": "ieq",
     "@context": [
-      "http://circuloos-ld-context/circuloos-context.jsonld"
+      "http://ramp-iiot-ld-context/ramp-iiot-context.jsonld"
     ],
     "temperature": {
       "type": "Property",

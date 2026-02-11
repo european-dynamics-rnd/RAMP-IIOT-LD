@@ -5,16 +5,16 @@ services:
       hostname: registrationtoentities
       container_name: registrationtoentities
       networks:
-        - circuloos
+        - ramp-iiot
       ports:
         - "8888:8888"
       environment:
         - LOG_LEVEL=DEBUG  #  DEBUG INFO ERROR
-        - USERNAME=test-circuloos
+        - USERNAME=test-ramp-iiot
         - PASSWORD=2UnGRKm7NW8Wxa9Z3N
         - CLIENT_SECRET=yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk
-        # - DEFAULT_CONTEXThttp://circuloos-ld-context/circuloos-context.jsonld
-        # - HTTP_SERVICES_BROKER_URL=https://circuloos-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert 
+        # - DEFAULT_CONTEXThttp://ramp-iiot-ld-context/ramp-iiot-context.jsonld
+        # - HTTP_SERVICES_BROKER_URL=https://ramp-iiot-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert 
 
  # for debuging 
  # See recieved notifications http://localhost:5055/view_data
