@@ -14,7 +14,10 @@ The main components of the RAMP IIoT LD platform are:
 The user can use a number of already developed [IoT Agents and Generic Enablers](https://github.com/FIWARE/catalogue#interface-with-iot-robots-and-third-party-systems) developed by FIWARE to provide data to the RAMP-IoT-LD platform.
 
 # Demo
-For demonstration prepusus a demo application has been implemented. See **[Demo.md](demo/Demo.md)**
+For demonstration purposes, a demo application has been implemented. See **[Demo.md](demo/Demo.md)**
+
+## Shopfloor Demonstration
+An additional shopfloor demonstration is available, showcasing the integration and operation of IIoT devices in a simulated factory environment. For details, setup instructions, and diagrams, see **[Shopfloor Demonstration Documentation](shopfloor-demostration/readme-shopfloor-demostration.md)**.
 
 ## Prerequisite
 RAMP IIoT LD platform runs in Docker containers and hence Docker and Docker-Compose are required. Machine where IoT platform can be either virtual machine or real computer, but it needs to have sufficient resources. Environment requires these _minimum_ resources:
