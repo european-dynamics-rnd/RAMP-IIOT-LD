@@ -52,6 +52,10 @@ Refer to the following diagram for an overview:
 
 ![Shopfloor System Architecture](./diagram-shopfloor-demostration.png)
 
+# RASPBERRY PI
+If you are utilizing RASPBERRY PI pi for hosting the RAMP-IIOT-LD please see the guide for installing the needed software [Guide](./rasbery_pi/rasbery_pi.md)
+We utilize an emulator to run the existing images, QEMU.
+
 ## Demos
 # Demos
 
