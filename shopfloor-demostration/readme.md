@@ -89,7 +89,6 @@ See [Troubleshoot.md](./Troubleshoot.md) for common problems and solutions.
 
 ## Support
 For further assistance, please contact the project maintainers or open an issue in the repository.
-
 ---
 
 © 2026 RAMP-IIOT-LD-ED Project. All rights reserved.

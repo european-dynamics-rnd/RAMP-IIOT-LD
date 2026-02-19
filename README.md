@@ -17,11 +17,11 @@ The user can use a number of already developed [IoT Agents and Generic Enablers]
 For demonstration purposes, a demo application has been implemented. See **[Demo.md](demo/Demo.md)**
 
 ## Shopfloor Demonstration
-An additional shopfloor demonstration is available, showcasing the integration and operation of IIoT devices in a simulated factory environment. For details, setup instructions, and diagrams, see **[Shopfloor Demonstration Documentation](shopfloor-demostration/readme-shopfloor-demostration.md)**.
+An additional shopfloor demonstration is available, showcasing the integration and operation of IIoT devices in a simulated factory environment. For details, setup instructions, and diagrams, see **[Shopfloor Demonstration Documentation](shopfloor-demostration/readme.md)**.
 
 ## Prerequisite
 RAMP IIoT LD platform runs in Docker containers and hence Docker and Docker-Compose are required. Machine where IoT platform can be either virtual machine or real computer, but it needs to have sufficient resources. Environment requires these _minimum_ resources:
-- 5GB RAM (Hard minum limit, more is better)
+- 5GB RAM (Hard minimum limit, more is better)
 - 50GB Disk space (more as needed for the data that is being stored)
 - 4 CPU's (less can work but results in performance loss)
 
