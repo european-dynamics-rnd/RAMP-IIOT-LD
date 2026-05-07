@@ -3,6 +3,7 @@ include:
 - keycloak.yml
 - temporal.yml
 - monitoring.yml
+- iot-agent-mqtt.yml
 
 services:
   # @context file is served from here
@@ -13,7 +14,7 @@ services:
     hostname: ramp_iiot-ld-context
     container_name: ramp_iiot-ld-context
     expose:
-        - "3004:80"
+        - 80
     networks:
       - ramp_iiot
     volumes:
@@ -61,7 +62,7 @@ services:
     hostname: ramp_iiot-mongo-db
     container_name: ramp_iiot-mongo-db
     expose:
-      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}"
+      - "${MONGO_DB_PORT}"
     networks:
       - ramp_iiot
     volumes:
