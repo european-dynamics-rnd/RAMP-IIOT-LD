@@ -3,3 +3,4 @@ demo/tokenMintaka.txt
 ssh
 .vscode/task.json
 integration_testing/__pycache__/
+mosquitto/mqtt-logs/mqtt_messages.log
