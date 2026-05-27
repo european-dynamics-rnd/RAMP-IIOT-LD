@@ -90,7 +90,7 @@ docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -c "\l" | grep -E "^\s\w"
 echo ""
 
 if [ -n "${TARGET_DB}" ]; then
-    DB_EXISTS=$(docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -v db_name="${TARGET_DB}" -tAc "SELECT 1 FROM pg_database WHERE datname = :'db_name';" | tr -d '[:space:]')
+    DB_EXISTS=$(docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -tAc "SELECT 1 FROM pg_database WHERE datname = '${TARGET_DB}';" | tr -d '[:space:]')
     if [ "${DB_EXISTS}" != "1" ]; then
         echo -e "${RED}Error: Database '${TARGET_DB}' does not exist${NC}"
         exit 1
