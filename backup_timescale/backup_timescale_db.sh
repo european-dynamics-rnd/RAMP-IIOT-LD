@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Backup script for ramp_iiot-timescale-db
-# This script creates a backup of ALL databases in the TimescaleDB PostgreSQL cluster
+# This script creates a backup of ALL databases or a specific database
 
 set -e
 export $(cat ../.env.secrets | grep "#" -v)
@@ -10,8 +10,7 @@ export $(cat ../.env.secrets | grep "#" -v)
 CONTAINER_NAME="ramp_iiot-timescale-db"
 BACKUP_DIR="."
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-BACKUP_FILE="ramp_iiot_timescaledb_ALL_backup_${TIMESTAMP}.sql"
-
+TARGET_DB=""
 
 DB_USER="${ORIONLD_TROE_USER}"
 # Colors for output
@@ -20,10 +19,57 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+usage() {
+    echo "Usage: $0 [--database <db_name>|-d <db_name>]"
+    echo ""
+    echo "Options:"
+    echo "  -d, --database <db_name>    Backup only the specified database"
+    echo "  -h, --help                  Show this help message"
+    echo ""
+    echo "If no database is specified, all databases are backed up."
+}
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--database)
+            if [[ -z "$2" || "$2" == -* ]]; then
+                echo -e "${RED}Error: Missing value for $1${NC}"
+                usage
+                exit 1
+            fi
+            TARGET_DB="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Error: Unknown option $1${NC}"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+if [ -n "${TARGET_DB}" ]; then
+    SAFE_DB_NAME=$(echo "${TARGET_DB}" | tr -c '[:alnum:]_-' '_')
+    BACKUP_FILE="ramp_iiot_timescaledb_${SAFE_DB_NAME}_backup_${TIMESTAMP}.sql"
+    BACKUP_MODE="SINGLE"
+else
+    BACKUP_FILE="ramp_iiot_timescaledb_ALL_backup_${TIMESTAMP}.sql"
+    BACKUP_MODE="ALL"
+fi
+
 # Create backup directory if it doesn't exist
 mkdir -p "${BACKUP_DIR}"
 
-echo -e "${YELLOW}Starting backup of ALL databases in TimescaleDB...${NC}"
+if [ "${BACKUP_MODE}" = "SINGLE" ]; then
+    echo -e "${YELLOW}Starting backup of database '${TARGET_DB}' in TimescaleDB...${NC}"
+else
+    echo -e "${YELLOW}Starting backup of ALL databases in TimescaleDB...${NC}"
+fi
 echo "Container: ${CONTAINER_NAME}"
 echo "User: ${DB_USER}"
 echo "Backup directory: ${BACKUP_DIR}"
@@ -43,18 +89,37 @@ echo -e "${YELLOW}Listing all databases...${NC}"
 docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -c "\l" | grep -E "^\s\w"
 echo ""
 
-# Perform the backup using pg_dumpall
-echo -e "${YELLOW}Creating database dump (all databases, roles, and tablespaces)...${NC}"
+if [ -n "${TARGET_DB}" ]; then
+    DB_EXISTS=$(docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -v db_name="${TARGET_DB}" -tAc "SELECT 1 FROM pg_database WHERE datname = :'db_name';" | tr -d '[:space:]')
+    if [ "${DB_EXISTS}" != "1" ]; then
+        echo -e "${RED}Error: Database '${TARGET_DB}' does not exist${NC}"
+        exit 1
+    fi
+fi
+
+# Perform the backup
+if [ "${BACKUP_MODE}" = "SINGLE" ]; then
+    echo -e "${YELLOW}Creating database dump for '${TARGET_DB}'...${NC}"
+else
+    echo -e "${YELLOW}Creating database dump (all databases, roles, and tablespaces)...${NC}"
+fi
 echo -e "${YELLOW}This may take several minutes depending on database size...${NC}"
 echo ""
 
 # Create a temporary file for verbose output
 VERBOSE_LOG="${BACKUP_DIR}/${BACKUP_FILE}.progress"
 
-# Run pg_dumpall with verbose output
-docker exec "${CONTAINER_NAME}" pg_dumpall -U "${DB_USER}" \
-    --clean --if-exists --verbose \
-    > "${BACKUP_DIR}/${BACKUP_FILE}" 2>"${VERBOSE_LOG}" &
+# Run backup command with verbose output
+if [ "${BACKUP_MODE}" = "SINGLE" ]; then
+    docker exec "${CONTAINER_NAME}" pg_dump -U "${DB_USER}" \
+        --dbname="${TARGET_DB}" --clean --if-exists --verbose \
+        > "${BACKUP_DIR}/${BACKUP_FILE}" 2>"${VERBOSE_LOG}" &
+    echo -e "${GREEN}Processing database: ${TARGET_DB}${NC}"
+else
+    docker exec "${CONTAINER_NAME}" pg_dumpall -U "${DB_USER}" \
+        --clean --if-exists --verbose \
+        > "${BACKUP_DIR}/${BACKUP_FILE}" 2>"${VERBOSE_LOG}" &
+fi
 
 # Get the PID of the background process
 DUMP_PID=$!
@@ -62,8 +127,8 @@ DUMP_PID=$!
 # Show progress indicator while backup is running
 LAST_DB=""
 while kill -0 $DUMP_PID 2>/dev/null; do
-    # Get current database being processed from verbose log
-    if [ -f "${VERBOSE_LOG}" ]; then
+    # Get current database being processed from verbose log (all-database mode)
+    if [ "${BACKUP_MODE}" = "ALL" ] && [ -f "${VERBOSE_LOG}" ]; then
         CURRENT_DB=$(grep -oP "pg_dump: dumping database \"\K[^\"]*" "${VERBOSE_LOG}" | tail -1)
         if [ ! -z "$CURRENT_DB" ] && [ "$CURRENT_DB" != "$LAST_DB" ]; then
             echo -e "${GREEN}Processing database: ${CURRENT_DB}${NC}"
@@ -109,15 +174,23 @@ if [ $BACKUP_EXIT_CODE -eq 0 ]; then
     # Optional: Keep only last N backups (uncomment and adjust as needed)
     # KEEP_BACKUPS=7
     # echo -e "${YELLOW}Cleaning old backups (keeping last ${KEEP_BACKUPS})...${NC}"
-    # ls -t "${BACKUP_DIR}"/ramp_iiot_timescaledb_ALL_backup_*.sql.gz | tail -n +$((KEEP_BACKUPS + 1)) | xargs -r rm
+    # ls -t "${BACKUP_DIR}"/ramp_iiot_timescaledb_*_backup_*.sql.gz | tail -n +$((KEEP_BACKUPS + 1)) | xargs -r rm
     
     echo -e "${GREEN}✓ Backup process completed!${NC}"
     echo ""
     echo -e "${YELLOW}Note: To restore, use:${NC}"
-    echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres"
+    if [ "${BACKUP_MODE}" = "SINGLE" ]; then
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d ${TARGET_DB}"
+    else
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres"
+    fi
     echo ""
     echo -e "${YELLOW}If restoration encounters constraint issues, use:${NC}"
-    echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres -v ON_ERROR_STOP=0"
+    if [ "${BACKUP_MODE}" = "SINGLE" ]; then
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d ${TARGET_DB} -v ON_ERROR_STOP=0"
+    else
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres -v ON_ERROR_STOP=0"
+    fi
 else
     echo -e "${RED}✗ Backup failed!${NC}"
     exit 1
