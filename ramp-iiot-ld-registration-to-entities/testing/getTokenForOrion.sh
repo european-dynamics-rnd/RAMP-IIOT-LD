@@ -2,10 +2,11 @@
 
 
 set -e
-export $(cat ./partner_variables.txt | grep "#" -v)
+export $(cat ../../.env | grep "#" -v)
+export $(cat ../../commands_URL/partner_variables.txt | grep "#" -v)
 
 # token=$(curl --insecure --location --request POST 'http://localhost:8082/realms/fiware-server/protocol/openid-connect/token' \
-token=$(curl -s --location --request POST 'https://'"${HOST}"'/idm/realms/fiware-server/protocol/openid-connect/token' \
+token=$(curl -s --location --request POST 'https://ignite-ldr-ramp.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token' \
 --header 'Content-Type: application/x-www-form-urlencoded' \
 --data-urlencode 'username='"${PARTNER_USERNAME}"'' \
 --data-urlencode 'password='"${PARTNER_PASSWORD}"'' \

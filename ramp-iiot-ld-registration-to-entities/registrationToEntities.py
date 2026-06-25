@@ -24,6 +24,7 @@ KEYCLOCK_URL = os.getenv('KEYCLOCK_URL', "https://ramp_iiot_ld-platform.eurodyn.
 USERNAME=os.getenv('USERNAME',"")
 PASSWORD=os.getenv('PASSWORD',"")
 CLIENT_SECRET=os.getenv('CLIENT_SECRET',"")
+OVERWRITE_NGSILD_TENANT=os.getenv('OVERWRITE_NGSILD_TENANT',"")
 
 # GENERAL_TENANT=test_federation
 
@@ -102,6 +103,10 @@ def proxy():
     
     token=get_token_ramp_iiot_ld()
     headers["Authorization"] = "Bearer " + token
+    
+    # Override NGSILD-Tenant header if environment variable is set
+    if OVERWRITE_NGSILD_TENANT:
+        headers["NGSILD-Tenant"] = OVERWRITE_NGSILD_TENANT
     
     
     url=HTTP_SERVICES_BROKER_URL

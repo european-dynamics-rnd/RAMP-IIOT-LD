@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
-export $(cat ../.env | grep "#" -v)
+export $(cat ../../.env | grep "#" -v)
 
 
-curl -L -X POST 'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/subscriptions/' \
+curl -L -X POST 'http://localhost:'"${ORION_LD_PORT}"'/ngsi-ld/v1/subscriptions/' \
   -H 'Content-Type: application/ld+json' \
   -H 'NGSILD-Tenant: test_federation' \
   -H 'NGSILD-Path: /' \
@@ -22,7 +22,7 @@ curl -L -X POST 'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/subscription
 }' 
 
 
-curl -L -X POST 'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/subscriptions/' \
+curl -L -X POST 'http://localhost:'"${ORION_LD_PORT}"'/ngsi-ld/v1/subscriptions/' \
   -H 'Content-Type: application/ld+json' \
   -H 'NGSILD-Tenant: test_federation' \
   -H 'NGSILD-Path: /' \

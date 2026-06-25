@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
-export $(cat ../.env | grep "#" -v)
-# ORION_LD_A_PORT=8888
-curl -iL -X POST  'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
-  -H 'Content-Type: application/ld+json' \
+export $(cat ../../.env | grep "#" -v)
+# ORION_LD_PORT=8888
+echo $ORION_LD_PORT
+curl  -X POST  'http://localhost:'"${ORION_LD_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
+  -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
   -H 'NGSILD-Tenant: test_federation' \
   -H 'NGSILD-Path: /' \
@@ -12,9 +13,6 @@ curl -iL -X POST  'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/entityOper
   {
     "id": "urn:ngsi-ld:ed:ieq-001",
     "type": "ieq",
-    "@context": [
-      "http://ramp-iiot-ld-ld-context/ramp-iiot-ld-context.jsonld"
-    ],
     "temperature": {
       "type": "Property",
       "value": 242,

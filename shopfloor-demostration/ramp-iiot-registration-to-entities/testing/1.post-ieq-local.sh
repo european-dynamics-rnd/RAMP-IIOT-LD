@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 export $(cat ../.env | grep "#" -v)
-# ORION_LD_A_PORT=8888
-curl -iL -X POST  'http://localhost:'"${ORION_LD_A_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
+# ORION_LD_PORT=8888
+curl -iL -X POST  'http://localhost:'"${ORION_LD_PORT}"'/ngsi-ld/v1/entityOperations/upsert' \
   -H 'Content-Type: application/ld+json' \
   -H 'Accept: application/json' \
   -H 'NGSILD-Tenant: test_federation' \

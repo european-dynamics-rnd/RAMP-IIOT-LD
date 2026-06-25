@@ -4,8 +4,8 @@
 #
 
 set -e
-export $(cat ../.env | grep "#" -v)
-export $(cat ./partner_variables.txt | grep "#" -v)
+export $(cat ../../.env | grep "#" -v)
+export $(cat ../../commands_URL/partner_variables.txt | grep "#" -v)
 
 ./getTokenForOrion.sh
 token=$(cat "token.txt")
