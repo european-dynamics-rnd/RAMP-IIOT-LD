@@ -1,14 +1,13 @@
 services:
 
   ramp_iiot-mintaka:
-    labels:
-      org.eurodyn: 'ramp_iiot'
+
     image: quay.io/fiware/mintaka:${MINTAKA_VERSION}
     hostname:  ramp_iiot-mintaka
     container_name:  ramp_iiot-mintaka
     restart: always
     depends_on:
-      - ramp_iiot-orion
+      - ramp-iiot-orion
       - ramp_iiot-timescale-db
     environment:
       - MICRONAUT_SERVER_PORT=${MINTAKA_PORT}
@@ -28,8 +27,6 @@ services:
       - ramp_iiot
 
   ramp_iiot-timescale-db:
-    labels:
-      org.eurodyn: 'ramp_iiot'
     image: timescale/timescaledb-postgis:${TIMESCALE_VERSION}
     hostname:  ramp_iiot-timescale-db
     container_name: ramp_iiot-timescale-db

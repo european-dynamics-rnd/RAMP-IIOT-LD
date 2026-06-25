@@ -9,7 +9,7 @@ export $(cat .env | grep "#" -v)
 command="$1"
 
 FINAL_DOCKER_YML="-f docker-compose.yml"
-FINAL_DOCKER_YML="$FINAL_DOCKER_YML -f iot-agent-mqtt.yml"
+# FINAL_DOCKER_YML="$FINAL_DOCKER_YML -f iot-agent-mqtt.yml"
 
 
 dockerCmd="docker compose"

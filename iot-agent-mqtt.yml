@@ -1,7 +1,5 @@
 services:
     # iot-agent-mqtt:
-    #   labels:
-    #     org.eurodyn: 'ramp_iiot'
     #   # image: quay.io/fiware/iotagent-ul:${JSON_VERSION}
     #   image: quay.io/fiware/iotagent-json:${JSON_VERSION}
     #   hostname: iot-agent-mqtt

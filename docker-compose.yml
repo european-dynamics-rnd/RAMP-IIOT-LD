@@ -4,12 +4,11 @@ include:
 - temporal.yml
 # - monitoring.yml
 # - iot-agent-mqtt.yml
+- ramp-iiot-ld-registration-to-entities/federation.yml
 
 services:
   # @context file is served from here
   ld-context:
-    labels:
-      org.eurodyn: 'ramp_iiot'
     image: httpd:alpine
     hostname: ramp_iiot-ld-context
     container_name: ramp_iiot-ld-context
@@ -22,13 +21,11 @@ services:
     # healthcheck:
     #   test: (wget --server-response --spider --quiet  http://ld-context/datamodels.context-ngsi.jsonld 2>&1 | awk 'NR==1{print $$2}'|  grep -q -e "200") || exit 1
  
-  ramp_iiot-orion:
-    labels:
-      org.eurodyn: 'ramp_iiot'
+  ramp-iiot-orion:
     platform: linux/amd64
     image: quay.io/fiware/orion-ld:${ORION_LD_VERSION}
-    hostname: ramp_iiot-orion
-    container_name: ramp_iiot-orion
+    hostname: ramp-iiot-orion
+    container_name: ramp-iiot-orion
     restart: always
     depends_on:
       - ramp_iiot-mongo-db
@@ -49,15 +46,13 @@ services:
       - ORIONLD_MONGO_HOST=ramp_iiot-mongo-db
       - ORIONLD_MULTI_SERVICE=TRUE
       - ORIONLD_DISABLE_FILE_LOG=TRUE
-    command: -logLevel DEBUG  -troePoolSize 10 -forwarding -mongocOnly
+    command: -logLevel DEBUG  -troePoolSize 10 -forwarding -mongocOnly -wip entityMaps
     healthcheck:
-      test: curl --fail -s http://ramp_iiot-orion:${ORION_LD_PORT}/version || exit 1
+      test: curl --fail -s http://ramp-iiot-orion:${ORION_LD_PORT}/version || exit 1
       interval: 10s
 
   # Databases
   ramp_iiot-mongo-db:
-    labels:
-      org.eurodyn: 'ramp_iiot'
     image: mongo:${MONGO_DB_VERSION}
     hostname: ramp_iiot-mongo-db
     container_name: ramp_iiot-mongo-db
@@ -76,8 +71,6 @@ services:
 
 networks:
   ramp_iiot:
-    labels:
-      org.eurodyn: 'ramp_iiot'
 
 
 volumes:
