@@ -1,9 +1,9 @@
 
 include:
-- keycloak.yml
+# - keycloak.yml
 - temporal.yml
-- monitoring.yml
-- iot-agent-mqtt.yml
+# - monitoring.yml
+# - iot-agent-mqtt.yml
 
 services:
   # @context file is served from here

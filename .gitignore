@@ -4,3 +4,8 @@ ssh
 .vscode/task.json
 integration_testing/__pycache__/
 mosquitto/mqtt-logs/mqtt_messages.log
+commands_URL/tokenMintaka.txt
+commands_URL/token.txt
+IGNITE.md
+.env.secrets
+commands_URL/partner_variables.txt

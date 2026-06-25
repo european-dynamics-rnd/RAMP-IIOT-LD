@@ -38,7 +38,9 @@ To run the integration testing, the system needs to be up and running.
 2. ```cd integration_testing```
 3. ```pytest -vvv```
 
-
+# NGSI-LD Federation
+Configure local Orion-LD to forward selected data to RAMP-IIOT-LD central Orion-LD automatically.
+- **Documentation**: [Readme_federation.md](./ramp-iiot-ld-registration-to-entities/Readme_federation.md)
 
 # Monitoring
 

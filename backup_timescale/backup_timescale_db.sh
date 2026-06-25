@@ -54,7 +54,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ -n "${TARGET_DB}" ]; then
-    SAFE_DB_NAME=$(echo "${TARGET_DB}" | tr -c '[:alnum:]_-' '_')
+    SAFE_DB_NAME=$(printf "%s" "${TARGET_DB}" | tr -c '[:alnum:]_-' '_')
     BACKUP_FILE="ramp_iiot_timescaledb_${SAFE_DB_NAME}_backup_${TIMESTAMP}.sql"
     BACKUP_MODE="SINGLE"
 else
@@ -90,7 +90,8 @@ docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -c "\l" | grep -E "^\s\w"
 echo ""
 
 if [ -n "${TARGET_DB}" ]; then
-    DB_EXISTS=$(docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -tAc "SELECT 1 FROM pg_database WHERE datname = '${TARGET_DB}';" | tr -d '[:space:]')
+    TARGET_DB_SQL=${TARGET_DB//\'/\'\'}
+    DB_EXISTS=$(docker exec "${CONTAINER_NAME}" psql -U "${DB_USER}" -tAc "SELECT 1 FROM pg_database WHERE datname = '${TARGET_DB_SQL}';" | tr -d '[:space:]')
     if [ "${DB_EXISTS}" != "1" ]; then
         echo -e "${RED}Error: Database '${TARGET_DB}' does not exist${NC}"
         exit 1
@@ -180,16 +181,17 @@ if [ $BACKUP_EXIT_CODE -eq 0 ]; then
     echo ""
     echo -e "${YELLOW}Note: To restore, use:${NC}"
     if [ "${BACKUP_MODE}" = "SINGLE" ]; then
-        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d ${TARGET_DB}"
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -X -U ${DB_USER} -d ${TARGET_DB}"
+        echo "Important: restore single-database backups into '${TARGET_DB}', not 'postgres'."
     else
-        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres"
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -X -U ${DB_USER} -d postgres"
     fi
     echo ""
     echo -e "${YELLOW}If restoration encounters constraint issues, use:${NC}"
     if [ "${BACKUP_MODE}" = "SINGLE" ]; then
-        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d ${TARGET_DB} -v ON_ERROR_STOP=0"
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -X -U ${DB_USER} -d ${TARGET_DB} -v ON_ERROR_STOP=0"
     else
-        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -U ${DB_USER} -d postgres -v ON_ERROR_STOP=0"
+        echo "gunzip -c ${BACKUP_DIR}/${BACKUP_FILE}.gz | docker exec -i ${CONTAINER_NAME} psql -X -U ${DB_USER} -d postgres -v ON_ERROR_STOP=0"
     fi
 else
     echo -e "${RED}✗ Backup failed!${NC}"
