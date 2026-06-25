@@ -1,0 +1,57 @@
+<mxfile host="65bd71144e">
+    <diagram name="Page-1" id="Es02p8DRjkub2hjDWlHL">
+        <mxGraphModel dx="884" dy="1750" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="80" value="ED SaaS" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="-160" width="370" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" value="Orion-LD" style="rounded=1;whiteSpace=wrap;html=1;" parent="80" vertex="1">
+                    <mxGeometry x="70" y="10" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" value="Keycloak" style="rounded=1;whiteSpace=wrap;html=1;" parent="80" vertex="1">
+                    <mxGeometry x="230" y="20" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="80" source="84" target="81" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="84" value="Kong Proxy" style="rounded=1;whiteSpace=wrap;html=1;" parent="80" vertex="1">
+                    <mxGeometry x="90" y="120" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="Local" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="70" width="370" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" value="Orion-LD" style="rounded=1;whiteSpace=wrap;html=1;" parent="85" vertex="1">
+                    <mxGeometry x="50" y="110" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="87" value="Keycloak" style="rounded=1;whiteSpace=wrap;html=1;" parent="85" vertex="1">
+                    <mxGeometry x="200" y="60" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="85" source="89" target="86" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="Kong Proxy" style="rounded=1;whiteSpace=wrap;html=1;" parent="85" vertex="1">
+                    <mxGeometry x="210" y="150" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" parent="85" source="94" target="86" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="Add authedication + TLS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="85" vertex="1">
+                    <mxGeometry x="200" y="15" width="170" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="ramp-iiot-ld-registration-to-entities" style="rounded=1;whiteSpace=wrap;html=1;" parent="85" vertex="1">
+                    <mxGeometry x="50" y="20" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="Partner needs to create a registration&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="-220" width="197" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" style="edgeStyle=none;html=1;exitX=0.43;exitY=-0.075;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="94" target="84" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="557" y="115" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

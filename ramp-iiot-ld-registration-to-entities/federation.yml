@@ -1,0 +1,35 @@
+services:
+
+    registrationtoentities:
+      build: .
+      hostname: registrationtoentities
+      container_name: registrationtoentities
+      networks:
+        - ramp-iiot-ld
+      ports:
+        - "8888:8888"
+      environment:
+        - LOG_LEVEL=DEBUG  #  DEBUG INFO ERROR
+        - USERNAME=test-ramp-iiot-ld
+        - PASSWORD=2UnGRKm7NW8Wxa9Z3N
+        - CLIENT_SECRET=yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk
+        - HTTP_SERVICES_BROKER_URL= https://ramp_iiot_ld-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert
+        - KEYCLOCK_URL = https://ramp_iiot_ld-platform.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token
+        # - DEFAULT_CONTEXThttp://ramp-iiot-ld-ld-context/ramp-iiot-ld-context.jsonld
+        # - HTTP_SERVICES_BROKER_URL=https://ramp-iiot-ld-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert 
+
+ # for debuging 
+ # See recieved notifications http://localhost:5055/view_data
+ 
+    recieve_notification_server:
+      build: ./recieve_notification_server
+      hostname: recieve-notification-server
+      container_name: recieve-notification-server
+      ports:
+        - "5055:5055"
+      networks:
+        - mpms-network
+      environment:
+        - FLASK_APP=app.py
+        - FLASK_RUN_HOST=0.0.0.0
+
