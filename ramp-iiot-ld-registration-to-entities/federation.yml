@@ -5,7 +5,7 @@ services:
       hostname: registrationtoentities
       container_name: registrationtoentities
       networks:
-        - ramp-iiot-ld
+        - ramp_iiot
       ports:
         - "8888:8888"
       environment:
@@ -13,8 +13,9 @@ services:
         - USERNAME=test-ramp-iiot-ld
         - PASSWORD=2UnGRKm7NW8Wxa9Z3N
         - CLIENT_SECRET=yWv2aRCm3KKMGrj9lMXQcEXY4v80tcFk
-        - HTTP_SERVICES_BROKER_URL= https://ramp_iiot_ld-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert
-        - KEYCLOCK_URL = https://ramp_iiot_ld-platform.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token
+        - HTTP_SERVICES_BROKER_URL= https://ignite-ldr-ramp.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert
+        - KEYCLOCK_URL= https://ignite-ldr-ramp.eurodyn.com/idm/realms/fiware-server/protocol/openid-connect/token
+        - OVERWRITE_NGSILD_TENANT=tapi
         # - DEFAULT_CONTEXThttp://ramp-iiot-ld-ld-context/ramp-iiot-ld-context.jsonld
         # - HTTP_SERVICES_BROKER_URL=https://ramp-iiot-ld-platform.eurodyn.com/kong/keycloak-orion/ngsi-ld/v1/entityOperations/upsert 
 
@@ -28,7 +29,7 @@ services:
       ports:
         - "5055:5055"
       networks:
-        - mpms-network
+        - ramp_iiot
       environment:
         - FLASK_APP=app.py
         - FLASK_RUN_HOST=0.0.0.0
