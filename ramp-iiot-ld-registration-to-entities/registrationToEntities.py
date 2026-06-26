@@ -48,8 +48,7 @@ def get_token_ramp_iiot_ld():
         logger.error(f'An unexpected error occurred: {err}')
     else:
         # Process the response if needed
-        logger.info('Request was successful.')
-        print(response.json())  # Example of processing the res
+        logger.debug(response.json())  # Example of processing the res
         response_json=response.json()
         logger.debug(response_json['access_token'])
         
@@ -99,6 +98,7 @@ def proxy():
     data = request.json
     # data=json.loads(data)
     data=fromRegistrationToEntity(data)
+    id=data['id']
     data=f"[{json.dumps(data)}]"
     
     token=get_token_ramp_iiot_ld()
@@ -111,10 +111,10 @@ def proxy():
     
     url=HTTP_SERVICES_BROKER_URL
     logger.info(f"Sending request:")
-    logger.info(f"  Method: {method}")
-    logger.info(f"  URL: {url}")
-    logger.info(f"  Headers: {headers}")
-    logger.info(f"  data: {data}")
+    logger.debug(f"  Method: {method}")
+    logger.info(f"  URL: {url}/{id}")
+    logger.debug(f"  Headers: {headers}")
+    logger.debug(f"  data: {data}")
 
     try:
         # Make the request to the target server
@@ -127,9 +127,8 @@ def proxy():
             allow_redirects=False
         )
         # Log the response details
-        logger.info(f"Received response:")
-        logger.info(f"  Status: {resp.status_code}")
-        logger.info(f"  Headers: {dict(resp.headers)}")
+        logger.info(f"Received response Status: {resp.status_code}")
+        logger.debug(f"  Headers: {dict(resp.headers)}")
         # Create a response object
         proxied_response = Response(
             stream_with_context(resp.iter_content(chunk_size=8192)),

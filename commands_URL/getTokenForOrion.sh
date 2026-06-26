@@ -13,6 +13,6 @@ token=$(curl -s --location --request POST 'https://ignite-ldr-ramp.eurodyn.com/i
 --data-urlencode 'client_id=orion-pep' \
 --data-urlencode 'client_secret='"${ORION_PEP_SECRET}"'' | jq .access_token )
 # remove starting and tailing double quatas "
-echo $token
+# echo $token
 token=$(sed -e 's/^"//' -e 's/"$//' <<<"$token")
 echo -n "$token" > token.txt
