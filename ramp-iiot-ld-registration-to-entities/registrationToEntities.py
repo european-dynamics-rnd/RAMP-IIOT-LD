@@ -6,6 +6,8 @@ import os
 import re
 import logging
 import json
+import threading
+from datetime import datetime, timezone
 
 log_level = os.getenv('LOG_LEVEL', 'ERROR').upper()
 # Configure logging
@@ -25,6 +27,29 @@ USERNAME=os.getenv('USERNAME',"")
 PASSWORD=os.getenv('PASSWORD',"")
 CLIENT_SECRET=os.getenv('CLIENT_SECRET',"")
 OVERWRITE_NGSILD_TENANT=os.getenv('OVERWRITE_NGSILD_TENANT',"")
+
+
+runtime_state_lock = threading.Lock()
+runtime_state = {
+    "started_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+    "last_proxy_request_at": None,
+    "last_upstream_status": None,
+    "last_upstream_error": None,
+}
+
+
+def now_iso():
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def set_runtime_state(**kwargs):
+    with runtime_state_lock:
+        runtime_state.update(kwargs)
+
+
+def get_runtime_state():
+    with runtime_state_lock:
+        return dict(runtime_state)
 
 # GENERAL_TENANT=test_federation
 
@@ -79,10 +104,30 @@ def fromRegistrationToEntity(registration_json):
 
 app = Flask(__name__)
 
+
+@app.route('/health', methods=['GET'])
+@app.route('/healthz', methods=['GET'])
+def health():
+    state = get_runtime_state()
+    upstream_status = state.get("last_upstream_status")
+    healthy = upstream_status is None or 200 <= upstream_status < 500
+
+    payload = {
+        "status": "ok" if healthy else "degraded",
+        "service": "registration-to-entities",
+        "last_proxy_request_at": state.get("last_proxy_request_at"),
+        "last_upstream_status": upstream_status,
+        "last_upstream_error": state.get("last_upstream_error"),
+        "started_at": state.get("started_at"),
+        "checked_at": now_iso(),
+    }
+    return payload, (200 if healthy else 503)
+
 @app.route('/proxy', methods=[ 'POST'])
 def proxy():
     # Ensure the URL has a scheme
     logger.info(request)
+    set_runtime_state(last_proxy_request_at=now_iso())
     # Get the method of the request
     method = request.method
 
@@ -129,6 +174,7 @@ def proxy():
         # Log the response details
         logger.info(f"Received response Status: {resp.status_code}")
         logger.debug(f"  Headers: {dict(resp.headers)}")
+        set_runtime_state(last_upstream_status=resp.status_code, last_upstream_error=None)
         # Create a response object
         proxied_response = Response(
             stream_with_context(resp.iter_content(chunk_size=8192)),
@@ -144,6 +190,7 @@ def proxy():
         return proxied_response
 
     except requests.RequestException as e:
+        set_runtime_state(last_upstream_status=503, last_upstream_error=str(e))
         logger.error(f"Error forwarding request: {str(e)}")
         return f"Error forwarding request: {str(e)}", 500
     
